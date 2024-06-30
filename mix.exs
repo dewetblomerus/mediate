@@ -32,6 +32,7 @@ defmodule Mediate.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:ash, "~> 3.0"},
       {:bandit, "~> 1.5"},
       {:dns_cluster, "~> 0.1.1"},
       {:ecto_sql, "~> 3.10"},
@@ -46,6 +47,7 @@ defmodule Mediate.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 1.0.0-rc.6", override: true},
       {:phoenix, "~> 1.7.14"},
+      {:picosat_elixir, "~> 0.2"},
       {:postgrex, ">= 0.0.0"},
       {:swoosh, "~> 1.5"},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},

@@ -32,6 +32,7 @@ defmodule Mediate.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:ash_authentication, "~> 4.0"},
       {:ash, "~> 3.0"},
       {:bandit, "~> 1.5"},
       {:dns_cluster, "~> 0.1.1"},

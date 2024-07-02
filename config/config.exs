@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :mediate, ash_domains: [Mediate.Accounts]
+
 config :mediate,
   ecto_repos: [Mediate.Repo],
   generators: [timestamp_type: :utc_datetime]

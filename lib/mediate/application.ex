@@ -12,6 +12,8 @@ defmodule Mediate.Application do
       Mediate.Repo,
       {DNSCluster, query: Application.get_env(:mediate, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Mediate.PubSub},
+      {AshAuthentication.Supervisor, otp_app: :mediate},
+
       # Start the Finch HTTP client for sending emails
       {Finch, name: Mediate.Finch},
       # Start a worker by calling: Mediate.Worker.start_link(arg)

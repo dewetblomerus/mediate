@@ -7,7 +7,7 @@
 # General application configuration
 import Config
 
-config :mediate, ash_domains: [Mediate.Accounts]
+config :mediate, ash_domains: [Mediate.Accounts, Mediate.Chat]
 
 config :mediate,
   ecto_repos: [Mediate.Repo],

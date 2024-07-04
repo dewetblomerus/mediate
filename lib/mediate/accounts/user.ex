@@ -21,6 +21,14 @@ defmodule Mediate.Accounts.User do
     identity :unique_auth0_id, [:auth0_id]
   end
 
+  relationships do
+    many_to_many :threads, Mediate.Chat.Thread do
+      through Mediate.Chat.ThreadUser
+      source_attribute_on_join_resource :user_id
+      destination_attribute_on_join_resource :thread_id
+    end
+  end
+
   authentication do
     domain(Mediate.Accounts)
 

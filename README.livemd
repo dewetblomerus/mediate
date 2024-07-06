@@ -1,0 +1,12 @@
+# Mediate
+
+## Testing Stuff
+
+```elixir
+
+```
+
+## Local Development
+
+* Run `mix setup` to install and setup dependencies
+* `mix phx.server`

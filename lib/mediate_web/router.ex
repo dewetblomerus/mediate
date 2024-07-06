@@ -26,6 +26,13 @@ defmodule MediateWeb.Router do
     sign_out_route AuthController
     auth_routes_for Mediate.Accounts.User, to: AuthController
     reset_route []
+
+    live "/threads", ThreadLive.Index, :index
+    live "/threads/new", ThreadLive.Index, :new
+    live "/threads/:id/edit", ThreadLive.Index, :edit
+
+    live "/threads/:id", ThreadLive.Show, :show
+    live "/threads/:id/show/edit", ThreadLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

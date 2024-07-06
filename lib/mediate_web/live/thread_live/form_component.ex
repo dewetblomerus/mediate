@@ -7,7 +7,9 @@ defmodule MediateWeb.ThreadLive.FormComponent do
     <div>
       <.header>
         <%= @title %>
-        <:subtitle>Use this form to manage thread records in your database.</:subtitle>
+        <:subtitle>
+          Use this form to manage thread records in your database.
+        </:subtitle>
       </.header>
 
       <.simple_form
@@ -17,11 +19,9 @@ defmodule MediateWeb.ThreadLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:name]} type="text" label="Name" /><.input
-          field={@form[:mediator_notes]}
-          type="text"
-          label="Mediator notes"
-        />
+        <.input field={@form[:name]} type="text" label="Name" />
+
+        <.input field={@form[:mediator_notes]} type="text" label="Mediator notes" />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Thread</.button>
@@ -41,17 +41,26 @@ defmodule MediateWeb.ThreadLive.FormComponent do
 
   @impl true
   def handle_event("validate", %{"thread" => thread_params}, socket) do
-    {:noreply, assign(socket, form: AshPhoenix.Form.validate(socket.assigns.form, thread_params))}
+    {:noreply,
+     assign(socket,
+       form: AshPhoenix.Form.validate(socket.assigns.form, thread_params)
+     )}
   end
 
-  def handle_event("save", %{"thread" => thread_params}, socket) do
+  def handle_event("save", %{"thread" => raw_thread_params}, socket) do
+    thread_params =
+      Map.put(raw_thread_params, "mediator_id", socket.assigns.current_user.id)
+
     case AshPhoenix.Form.submit(socket.assigns.form, params: thread_params) do
       {:ok, thread} ->
         notify_parent({:saved, thread})
 
         socket =
           socket
-          |> put_flash(:info, "Thread #{socket.assigns.form.source.type}d successfully")
+          |> put_flash(
+            :info,
+            "Thread #{socket.assigns.form.source.type}d successfully"
+          )
           |> push_patch(to: socket.assigns.patch)
 
         {:noreply, socket}

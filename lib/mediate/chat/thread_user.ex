@@ -3,21 +3,11 @@ defmodule Mediate.Chat.ThreadUser do
     data_layer: AshPostgres.DataLayer,
     domain: Mediate.Chat
 
-  postgres do
-    table "thread_users"
-    repo Mediate.Repo
+  code_interface do
+    domain Mediate.Chat
 
-    references do
-      reference :thread,
-        on_delete: :delete,
-        on_update: :update,
-        name: "thread_users_thread_id_fkey"
-
-      reference :user,
-        on_delete: :delete,
-        on_update: :update,
-        name: "thread_users_user_id_fkey"
-    end
+    define :create, action: :create
+    define :delete, action: :destroy
   end
 
   relationships do
@@ -35,6 +25,32 @@ defmodule Mediate.Chat.ThreadUser do
   end
 
   actions do
-    defaults [:read, :destroy, create: :*, update: :*]
+    defaults [:read, :destroy, update: :*]
+
+    create :create do
+      accept [:user_id, :thread_id]
+      primary? true
+    end
+  end
+
+  postgres do
+    table "thread_users"
+    repo Mediate.Repo
+
+    references do
+      reference :thread,
+        on_delete: :delete,
+        on_update: :update,
+        name: "thread_users_thread_id_fkey"
+
+      reference :user,
+        on_delete: :delete,
+        on_update: :update,
+        name: "thread_users_user_id_fkey"
+    end
+  end
+
+  resource do
+    plural_name :thread_users
   end
 end

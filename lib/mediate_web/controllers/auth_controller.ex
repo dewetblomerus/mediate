@@ -15,7 +15,7 @@ defmodule MediateWeb.AuthController do
   def failure(conn, _activity, _reason) do
     conn
     |> put_flash(:error, "Incorrect email or password")
-    |> redirect(to: ~p"/sign-in")
+    |> redirect(to: ~p"/auth/user/auth0")
   end
 
   def sign_out(conn, _params) do

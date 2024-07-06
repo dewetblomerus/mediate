@@ -22,17 +22,20 @@ defmodule MediateWeb.Router do
 
     get "/", PageController, :home
 
-    sign_in_route(register_path: "/register", reset_path: "/reset")
+    # sign_in_route(register_path: "/register", reset_path: "/reset")
     sign_out_route AuthController
     auth_routes_for Mediate.Accounts.User, to: AuthController
     reset_route []
 
-    live "/threads", ThreadLive.Index, :index
-    live "/threads/new", ThreadLive.Index, :new
-    live "/threads/:id/edit", ThreadLive.Index, :edit
+    ash_authentication_live_session :authentication_required,
+      on_mount: {MediateWeb.LiveUserAuth, :live_user_required} do
+      live "/threads", ThreadLive.Index, :index
+      live "/threads/new", ThreadLive.Index, :new
+      live "/threads/:id/edit", ThreadLive.Index, :edit
 
-    live "/threads/:id", ThreadLive.Show, :show
-    live "/threads/:id/show/edit", ThreadLive.Show, :edit
+      live "/threads/:id", ThreadLive.Show, :show
+      live "/threads/:id/show/edit", ThreadLive.Show, :edit
+    end
   end
 
   # Other scopes may use custom stacks.

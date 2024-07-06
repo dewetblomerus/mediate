@@ -4,6 +4,12 @@ defmodule Mediate.Accounts.User do
     domain: Mediate.Accounts,
     extensions: [AshAuthentication]
 
+  code_interface do
+    domain Mediate.Accounts
+
+    define :get_by, action: :get_by
+  end
+
   attributes do
     integer_primary_key :id
     attribute :email, :ci_string, allow_nil?: false
@@ -14,6 +20,11 @@ defmodule Mediate.Accounts.User do
 
     create_timestamp :created_at
     update_timestamp :updated_at
+  end
+
+  aggregates do
+    list :participating_threads, :threads do
+    end
   end
 
   identities do
@@ -43,6 +54,8 @@ defmodule Mediate.Accounts.User do
   end
 
   actions do
+    defaults [:read]
+
     create :register_with_auth0 do
       argument :user_info, :map, allow_nil?: false
       argument :oauth_tokens, :map, allow_nil?: false
@@ -67,6 +80,10 @@ defmodule Mediate.Accounts.User do
           changes
         )
       end
+    end
+
+    read :get_by do
+      get_by [:email]
     end
   end
 

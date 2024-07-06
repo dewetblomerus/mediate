@@ -4,10 +4,15 @@ defmodule Mediate.Chat.Thread do
     domain: Mediate.Chat
 
   actions do
-    defaults [:read, :destroy]
+    defaults [:destroy]
+
+    read :read do
+      filter expr(mediator_id == ^actor(:id))
+      primary? true
+    end
 
     create :create do
-      accept [:name, :mediator_notes]
+      accept [:mediator_id, :name, :mediator_notes]
       primary? true
     end
 

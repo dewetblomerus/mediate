@@ -1,4 +1,4 @@
-defmodule MediateWeb.ThreadLive.FormComponent do
+defmodule MediateWeb.AdminThreadLive.FormComponent do
   use MediateWeb, :live_component
 
   @impl true

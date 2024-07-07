@@ -1,4 +1,4 @@
-defmodule MediateWeb.ThreadLive.Index do
+defmodule MediateWeb.AdminThreadLive.Index do
   use MediateWeb, :live_view
 
   @impl true
@@ -46,7 +46,7 @@ defmodule MediateWeb.ThreadLive.Index do
       on_cancel={JS.patch(~p"/threads")}
     >
       <.live_component
-        module={MediateWeb.ThreadLive.FormComponent}
+        module={MediateWeb.AdminThreadLive.FormComponent}
         id={(@thread && @thread.id) || :new}
         title={@page_title}
         current_user={@current_user}
@@ -97,7 +97,7 @@ defmodule MediateWeb.ThreadLive.Index do
 
   @impl true
   def handle_info(
-        {MediateWeb.ThreadLive.FormComponent, {:saved, thread}},
+        {MediateWeb.AdminThreadLive.FormComponent, {:saved, thread}},
         socket
       ) do
     {:noreply, stream_insert(socket, :threads, thread)}

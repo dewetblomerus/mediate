@@ -29,12 +29,12 @@ defmodule MediateWeb.Router do
 
     ash_authentication_live_session :authentication_required,
       on_mount: {MediateWeb.LiveUserAuth, :live_user_required} do
-      live "/threads", ThreadLive.Index, :index
-      live "/threads/new", ThreadLive.Index, :new
-      live "/threads/:id/edit", ThreadLive.Index, :edit
+      live "/threads", AdminThreadLive.Index, :index
+      live "/threads/new", AdminThreadLive.Index, :new
+      live "/threads/:id/edit", AdminThreadLive.Index, :edit
 
-      live "/threads/:id", ThreadLive.Show, :show
-      live "/threads/:id/show/edit", ThreadLive.Show, :edit
+      live "/threads/:id", AdminThreadLive.Show, :show
+      live "/threads/:id/show/edit", AdminThreadLive.Show, :edit
     end
   end
 

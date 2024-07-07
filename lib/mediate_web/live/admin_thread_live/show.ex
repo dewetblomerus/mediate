@@ -1,4 +1,4 @@
-defmodule MediateWeb.ThreadLive.Show do
+defmodule MediateWeb.AdminThreadLive.Show do
   use MediateWeb, :live_view
 
   alias Mediate.Chat.ThreadUser
@@ -44,7 +44,7 @@ defmodule MediateWeb.ThreadLive.Show do
       on_cancel={JS.patch(~p"/threads/#{@thread}")}
     >
       <.live_component
-        module={MediateWeb.ThreadLive.FormComponent}
+        module={MediateWeb.AdminThreadLive.FormComponent}
         id={@thread.id}
         title={@page_title}
         action={@live_action}

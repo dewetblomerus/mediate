@@ -3,7 +3,14 @@
 ## Testing Stuff
 
 ```elixir
+alias Mediate.Chat.Thread
+alias Mediate.Accounts.User
 
+user = User.get_by!(%{email: "dewetblomerus@gmail.com"})
+id = 4
+thread = Ash.get!(Mediate.Chat.Thread, id, actor: user)
+
+Ash.destroy!(thread, actor: user)
 ```
 
 ## Local Development

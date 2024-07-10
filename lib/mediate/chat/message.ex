@@ -3,6 +3,19 @@ defmodule Mediate.Chat.Message do
     data_layer: AshPostgres.DataLayer,
     domain: Mediate.Chat
 
+  actions do
+    defaults [:destroy, :update, :read]
+
+    read :get_by do
+      get_by [:thread_id]
+    end
+
+    create :create do
+      accept [:body, :thread_id, :sender_id]
+      primary? true
+    end
+  end
+
   attributes do
     integer_primary_key :id
     attribute :body, :string, allow_nil?: false
@@ -38,5 +51,9 @@ defmodule Mediate.Chat.Message do
         on_update: :update,
         name: "messages_sender_id_fkey"
     end
+  end
+
+  resource do
+    plural_name :messages
   end
 end

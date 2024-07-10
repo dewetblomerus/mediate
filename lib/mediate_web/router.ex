@@ -17,10 +17,12 @@ defmodule MediateWeb.Router do
     plug :load_from_bearer
   end
 
+  pipeline :admin do
+    plug Mediate.AdminChecker
+  end
+
   scope "/", MediateWeb do
     pipe_through :browser
-
-    get "/", PageController, :home
 
     # sign_in_route(register_path: "/register", reset_path: "/reset")
     sign_out_route AuthController
@@ -29,12 +31,22 @@ defmodule MediateWeb.Router do
 
     ash_authentication_live_session :authentication_required,
       on_mount: {MediateWeb.LiveUserAuth, :live_user_required} do
-      live "/threads", AdminThreadLive.Index, :index
-      live "/threads/new", AdminThreadLive.Index, :new
-      live "/threads/:id/edit", AdminThreadLive.Index, :edit
+      live "/", ThreadLive, :index
 
-      live "/threads/:id", AdminThreadLive.Show, :show
-      live "/threads/:id/show/edit", AdminThreadLive.Show, :edit
+      scope "/:thread_id", as: :thread do
+        live "/", MessageLive.Index, :index
+      end
+
+      scope "/admin" do
+        pipe_through :admin
+
+        live "/threads", AdminThreadLive.Index, :index
+        live "/threads/new", AdminThreadLive.Index, :new
+        live "/threads/:id/edit", AdminThreadLive.Index, :edit
+
+        live "/threads/:id", AdminThreadLive.Show, :show
+        live "/threads/:id/show/edit", AdminThreadLive.Show, :edit
+      end
     end
   end
 

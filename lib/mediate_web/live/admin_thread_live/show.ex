@@ -10,7 +10,10 @@ defmodule MediateWeb.AdminThreadLive.Show do
       <%= @thread.name %>
 
       <:actions>
-        <.link patch={~p"/threads/#{@thread}/show/edit"} phx-click={JS.push_focus()}>
+        <.link
+          patch={~p"/admin/threads/#{@thread}/show/edit"}
+          phx-click={JS.push_focus()}
+        >
           <.button>Edit thread</.button>
         </.link>
       </:actions>
@@ -35,13 +38,13 @@ defmodule MediateWeb.AdminThreadLive.Show do
       </:col>
     </.table>
 
-    <.back navigate={~p"/threads"}>Back to threads</.back>
+    <.back navigate={~p"/admin/threads"}>Back to threads</.back>
 
     <.modal
       :if={@live_action == :edit}
       id="thread-modal"
       show
-      on_cancel={JS.patch(~p"/threads/#{@thread}")}
+      on_cancel={JS.patch(~p"/admin/threads/#{@thread}")}
     >
       <.live_component
         module={MediateWeb.AdminThreadLive.FormComponent}
@@ -50,7 +53,7 @@ defmodule MediateWeb.AdminThreadLive.Show do
         action={@live_action}
         current_user={@current_user}
         thread={@thread}
-        patch={~p"/threads/#{@thread}"}
+        patch={~p"/admin/threads/#{@thread}"}
       />
     </.modal>
     """

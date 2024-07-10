@@ -3,6 +3,12 @@ defmodule Mediate.Chat.Thread do
     data_layer: AshPostgres.DataLayer,
     domain: Mediate.Chat
 
+  code_interface do
+    domain Mediate.Chat
+
+    define :get_by, action: :get_by
+  end
+
   actions do
     defaults [:destroy]
 
@@ -19,6 +25,10 @@ defmodule Mediate.Chat.Thread do
     update :update do
       accept [:name, :mediator_notes]
       primary? true
+    end
+
+    read :get_by do
+      get_by [:id]
     end
   end
 
@@ -42,6 +52,8 @@ defmodule Mediate.Chat.Thread do
       source_attribute_on_join_resource :thread_id
       destination_attribute_on_join_resource :user_id
     end
+
+    has_many :messages, Mediate.Chat.Message
   end
 
   postgres do

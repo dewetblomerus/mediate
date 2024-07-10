@@ -1,60 +1,26 @@
-defmodule MediateWeb.AdminThreadLive.Index do
+defmodule MediateWeb.ThreadLive do
   use MediateWeb, :live_view
 
   @impl true
   def render(assigns) do
     ~H"""
     <.header>
-      Threads You Moderate
-      <:actions>
-        <.link patch={~p"/admin/threads/new"}>
-          <.button>New Thread</.button>
-        </.link>
-      </:actions>
+      Your Threads
     </.header>
 
     <.table
       id="threads"
       rows={@streams.threads}
-      row_click={fn {_id, thread} -> JS.navigate(~p"/admin/threads/#{thread}") end}
+      row_click={fn {_id, thread} -> JS.navigate(~p"/#{thread}") end}
     >
-      <:col :let={{_id, thread}} label="Id"><%= thread.id %></:col>
       <:col :let={{_name, thread}} label="Name"><%= thread.name %></:col>
 
       <:action :let={{_id, thread}}>
         <div class="sr-only">
-          <.link navigate={~p"/admin/threads/#{thread}"}>Show</.link>
+          <.link navigate={~p"/#{thread}"}>Show</.link>
         </div>
-
-        <.link patch={~p"/admin/threads/#{thread}/edit"}>Edit</.link>
-      </:action>
-
-      <:action :let={{id, thread}}>
-        <.link
-          phx-click={JS.push("delete", value: %{id: thread.id}) |> hide("##{id}")}
-          data-confirm="Are you sure?"
-        >
-          Delete
-        </.link>
       </:action>
     </.table>
-
-    <.modal
-      :if={@live_action in [:new, :edit]}
-      id="thread-modal"
-      show
-      on_cancel={JS.patch(~p"/admin/threads")}
-    >
-      <.live_component
-        module={MediateWeb.AdminThreadLive.FormComponent}
-        id={(@thread && @thread.id) || :new}
-        title={@page_title}
-        current_user={@current_user}
-        action={@live_action}
-        thread={@thread}
-        patch={~p"/admin/threads"}
-      />
-    </.modal>
     """
   end
 

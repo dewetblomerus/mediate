@@ -26,11 +26,20 @@ defmodule MediateWeb.ThreadLive do
 
   @impl true
   def mount(_params, _session, socket) do
+    user =
+      Ash.load!(
+        socket.assigns[:current_user],
+        [
+          :threads
+        ],
+        actor: socket.assigns[:current_user]
+      )
+
     {:ok,
      socket
      |> stream(
        :threads,
-       Ash.read!(Mediate.Chat.Thread, actor: socket.assigns[:current_user])
+       user.threads
      )
      |> assign_new(:current_user, fn -> nil end)}
   end

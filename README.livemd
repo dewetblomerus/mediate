@@ -7,13 +7,18 @@ alias Mediate.Chat.Thread
 alias Mediate.Accounts.User
 
 user = User.get_by!(%{email: "dewetblomerus@gmail.com"})
-id = 4
-thread = Ash.get!(Mediate.Chat.Thread, id, actor: user)
 
-Ash.destroy!(thread, actor: user)
+user =
+  Ash.load!(
+    user,
+    [
+      :threads
+    ],
+    actor: user
+  )
 ```
 
 ## Local Development
 
-* Run `mix setup` to install and setup dependencies
-* `mix phx.server`
+- Run `mix setup` to install and setup dependencies
+- `mix phx.server`

@@ -7,14 +7,15 @@ defmodule Mediate.Chat.Thread do
     domain Mediate.Chat
 
     define :get_by, action: :get_by
+
+    define :for_mediator, action: :for_mediator
   end
 
   actions do
-    defaults [:destroy]
+    defaults [:read, :destroy]
 
-    read :read do
+    read :for_mediator do
       filter expr(mediator_id == ^actor(:id))
-      primary? true
     end
 
     create :create do

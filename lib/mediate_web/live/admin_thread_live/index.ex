@@ -1,6 +1,8 @@
 defmodule MediateWeb.AdminThreadLive.Index do
   use MediateWeb, :live_view
 
+  alias Mediate.Chat.Thread
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -64,7 +66,7 @@ defmodule MediateWeb.AdminThreadLive.Index do
      socket
      |> stream(
        :threads,
-       Ash.read!(Mediate.Chat.Thread, actor: socket.assigns[:current_user])
+       Thread.for_mediator!(actor: socket.assigns[:current_user])
      )
      |> assign_new(:current_user, fn -> nil end)}
   end

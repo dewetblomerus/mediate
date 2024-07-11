@@ -6,19 +6,19 @@
 alias Mediate.Chat.Thread
 alias Mediate.Accounts.User
 
-user = User.get_by!(%{email: "dewetblomerus@gmail.com"})
+user = User.get_by!(%{email: "dewetblomerus+marysol@gmail.com"})
+```
 
-user =
-  Ash.load!(
-    user,
-    [
-      :threads
-    ],
-    actor: user
-  )
+```elixir
+# user =
+#   Ash.load!(user, [
+#     :threads
+#   ], actor: user)
+
+Thread.for_mediator!(actor: user)
 ```
 
 ## Local Development
 
-- Run `mix setup` to install and setup dependencies
-- `mix phx.server`
+* Run `mix setup` to install and setup dependencies
+* `mix phx.server`

@@ -24,7 +24,7 @@ defmodule MediateWeb.Router do
   scope "/", MediateWeb do
     pipe_through :browser
 
-    # sign_in_route(register_path: "/register", reset_path: "/reset")
+    sign_in_route(register_path: "/register", reset_path: "/reset")
     sign_out_route AuthController
     auth_routes_for Mediate.Accounts.User, to: AuthController
     reset_route []

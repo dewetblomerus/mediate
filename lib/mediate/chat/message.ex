@@ -3,11 +3,18 @@ defmodule Mediate.Chat.Message do
     data_layer: AshPostgres.DataLayer,
     domain: Mediate.Chat
 
+  code_interface do
+    domain Mediate.Chat
+
+    define :for_thread, action: :for_thread
+  end
+
   actions do
     defaults [:destroy, :update, :read]
 
-    read :get_by do
-      get_by [:thread_id]
+    read :for_thread do
+      argument :thread_id, :integer, allow_nil?: false
+      filter expr(thread_id == ^arg(:thread_id))
     end
 
     create :create do

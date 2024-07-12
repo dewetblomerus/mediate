@@ -4,7 +4,9 @@
 
 ```elixir
 alias Mediate.Chat.Thread
+alias Mediate.Chat.Message
 alias Mediate.Accounts.User
+require Ash.Query
 
 user = User.get_by!(%{email: "dewetblomerus+marysol@gmail.com"})
 ```
@@ -16,6 +18,48 @@ user = User.get_by!(%{email: "dewetblomerus+marysol@gmail.com"})
 #   ], actor: user)
 
 Thread.for_mediator!(actor: user)
+```
+
+```elixir
+thread_id = 2
+
+# messages =
+#       Mediate.Chat.Message
+#       |> Ash.Query.filter(thread_id == ^thread_id)
+#       |> Ash.read!(actor: socket.assigns[:current_user])
+
+# Message.get_by(%{thread_id: 1})
+# messages =
+#       Mediate.Chat.Message
+#       |> Ash.Query.filter(thread_id == ^thread_id)
+#       |> Ash.read!(actor: socket.assigns[:current_user])
+
+# Red.Practice.Card
+# |> Ash.Query.for_read(:next, %{}, actor: user)
+# |> Red.Practice.read_one!()
+# for_read(query, action_name, args \\ %{}, opts \\ [])
+
+# Mediate.Chat.Message
+# |> Ash.Query.for_read(:for_thread, %{thread_id: thread_id})
+# |> Ash.Query.load([:sender])
+# |> Ash.read!()
+
+# Mediate.Chat.Thread
+# |> Ash.Query.for_read(:get_by, %{id: 2})
+# |> Ash.read!()
+# |> Ash.load!([:users])
+
+# User
+# |> Ash.Query.for_read(:for_thread, %{thread_id: 2})
+# |> Ash.Query.select([:id, :name, :picture])
+# |> Ash.read!()
+
+# User
+# |> Ash.Query.filter(^thread_id in participating_threads)
+# |> Ash.Query.select([:id, :name])
+# |> Ash.read!()
+
+Message.for_thread!(%{thread_id: thread_id})
 ```
 
 ## Local Development

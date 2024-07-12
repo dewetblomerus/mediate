@@ -85,6 +85,12 @@ defmodule Mediate.Accounts.User do
     read :get_by do
       get_by [:email]
     end
+
+    read :for_thread do
+      argument :thread_id, :integer, allow_nil?: false
+
+      filter expr(^arg(:thread_id) in participating_threads)
+    end
   end
 
   postgres do

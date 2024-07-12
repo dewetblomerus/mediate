@@ -1,6 +1,8 @@
 defmodule MediateWeb.MessageLive.Index do
   use MediateWeb, :live_view
   require Ash.Query
+  alias Mediate.Accounts.User
+  alias Mediate.Chat.Message
 
   @impl true
   def render(assigns) do
@@ -8,13 +10,10 @@ defmodule MediateWeb.MessageLive.Index do
     <%= @thread.name %>
 
     <.table id="messages" rows={@streams.messages}>
-      <:col :let={{_id, message}} label="Messages"><%= message.body %></:col>
-
-      <:action :let={{_id, message}}>
-        <div class="sr-only">
-          <.link navigate={~p"/messages/#{message}"}>Show</.link>
-        </div>
-      </:action>
+      <:col :let={{_id, message}}>
+        <strong><%= sender_name(message, @participants) %></strong>
+        <div><%= message.body %></div>
+      </:col>
     </.table>
 
     <.simple_form
@@ -35,19 +34,27 @@ defmodule MediateWeb.MessageLive.Index do
   @impl true
   def mount(%{"thread_id" => thread_id}, _session, socket) do
     messages =
-      Mediate.Chat.Message
-      |> Ash.Query.filter(thread_id == ^thread_id)
-      |> Ash.read!(actor: socket.assigns[:current_user])
+      Message.for_thread!(%{thread_id: thread_id})
 
     thread =
       Mediate.Chat.Thread.get_by!(%{id: thread_id})
 
+    participants =
+      User
+      |> Ash.Query.for_read(:for_thread, %{thread_id: 2})
+      |> Ash.Query.select([:id, :name, :picture])
+      |> Ash.read!()
+      |> Enum.reduce(%{}, fn participant, acc ->
+        Map.put(acc, participant.id, participant)
+      end)
+
     {:ok,
      socket
      |> assign(%{
+       message: nil,
+       participants: participants,
        thread_id: thread_id,
-       thread: thread,
-       message: nil
+       thread: thread
      })
      |> assign_form()
      |> stream(
@@ -122,5 +129,10 @@ defmodule MediateWeb.MessageLive.Index do
       )
 
     assign(socket, form: to_form(form))
+  end
+
+  defp sender_name(%Message{} = message, participants) do
+    participant = participants[message.sender_id]
+    participant.name
   end
 end

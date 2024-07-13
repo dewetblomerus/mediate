@@ -9,6 +9,8 @@ defmodule Mediate.Chat.Thread do
     define :get_by, action: :get_by
 
     define :for_mediator, action: :for_mediator
+
+    define :create, action: :create
   end
 
   actions do
@@ -19,7 +21,8 @@ defmodule Mediate.Chat.Thread do
     end
 
     create :create do
-      accept [:mediator_id, :name, :mediator_notes]
+      accept [:name, :mediator_notes]
+      change relate_actor(:mediator)
       primary? true
     end
 

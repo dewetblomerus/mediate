@@ -35,6 +35,7 @@ defmodule MediateWeb.Router do
 
       scope "/:thread_id", as: :thread do
         live "/", MessageLive.Index, :index
+        live "/suggest", MessageLive.Index, :suggest
       end
 
       scope "/admin" do

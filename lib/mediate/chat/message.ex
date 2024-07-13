@@ -7,6 +7,7 @@ defmodule Mediate.Chat.Message do
     domain Mediate.Chat
 
     define :for_thread, action: :for_thread
+    define :create, action: :create
   end
 
   actions do

@@ -7,3 +7,6 @@ config :mediate,
     client_secret: "auth0-client-secret",
     base_url: "https://auth0-domain"
   }
+
+config :mediate,
+  openapi_key: "your-openai-api-key"

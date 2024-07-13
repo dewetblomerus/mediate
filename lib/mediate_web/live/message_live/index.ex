@@ -3,6 +3,7 @@ defmodule MediateWeb.MessageLive.Index do
   require Ash.Query
   alias Mediate.Accounts.User
   alias Mediate.Chat.Message
+  alias Mediate.Generator
 
   @impl true
   def render(assigns) do
@@ -28,6 +29,24 @@ defmodule MediateWeb.MessageLive.Index do
         <.button phx-disable-with="Saving...">Save Message</.button>
       </:actions>
     </.simple_form>
+    <.link patch={~p"/#{@thread_id}/suggest"}>Suggest</.link>
+
+    <.modal
+      :if={@live_action == :suggest}
+      id="message-modal"
+      show
+      on_cancel={JS.patch(~p"/#{@thread_id}")}
+    >
+      <.live_component
+        module={MediateWeb.MessageLive.FormComponent}
+        id={@thread.id}
+        title={@page_title}
+        current_user={@current_user}
+        action={@live_action}
+        thread={@thread}
+        patch={~p"/#{@thread_id}/suggest"}
+      />
+    </.modal>
     """
   end
 
@@ -81,6 +100,12 @@ defmodule MediateWeb.MessageLive.Index do
     |> assign(:message, nil)
   end
 
+  defp apply_action(socket, :suggest, _params) do
+    socket
+    |> assign(:page_title, "Suggested Message")
+    |> assign(:message, nil)
+  end
+
   @impl true
   def handle_info(
         {MediateWeb.MessageLive.FormComponent, {:saved, message}},
@@ -104,24 +129,37 @@ defmodule MediateWeb.MessageLive.Index do
         "sender_id" => socket.assigns.current_user.id
       })
 
-    case AshPhoenix.Form.submit(socket.assigns.form, params: message_params) do
-      {:ok, message} ->
-        socket =
-          socket
-          |> put_flash(
-            :info,
-            "Message #{socket.assigns.form.source.type}d successfully"
-          )
-          |> assign_form()
+    dbg(socket.assigns.thread)
+    dbg(message_params)
+    dbg(socket.assigns.current_user)
 
-        {:noreply, stream_insert(socket, :messages, message)}
+    Generator.generate(
+      socket.assigns.thread,
+      message_params,
+      socket.assigns.current_user
+    )
+    |> dbg()
 
-      {:error, form} ->
-        {:noreply, assign(socket, form: form)}
-    end
+    # case AshPhoenix.Form.submit(socket.assigns.form, params: message_params) do
+    #   {:ok, message} ->
+    #     socket =
+    #       socket
+    #       |> put_flash(
+    #         :info,
+    #         "Message #{socket.assigns.form.source.type}d successfully"
+    #       )
+    #       |> assign_form()
+
+    #     {:noreply, stream_insert(socket, :messages, message)}
+
+    #   {:error, form} ->
+    #     {:noreply, assign(socket, form: form)}
+    # end
+
+    {:noreply, socket}
   end
 
-  defp assign_form(%{assigns: %{message: message}} = socket) do
+  defp assign_form(%{assigns: %{message: _message}} = socket) do
     form =
       AshPhoenix.Form.for_create(Mediate.Chat.Message, :create,
         as: "message",

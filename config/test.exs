@@ -17,11 +17,20 @@ config :mediate, Mediate.Repo,
 # you can enable the server option below.
 config :mediate, MediateWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "UQlL1F6zr5ey+WZ08r5YnRhudRK+1RzknmREa0+yif6VGnkdtFhwgADNpxd1Ct4G",
+  secret_key_base:
+    "UQlL1F6zr5ey+WZ08r5YnRhudRK+1RzknmREa0+yif6VGnkdtFhwgADNpxd1Ct4G",
   server: false
 
 # In test we don't send emails
 config :mediate, Mediate.Mailer, adapter: Swoosh.Adapters.Test
+
+config :mediate,
+  req_options: [
+    plug: {Req.Test, Mediate.OpenAi}
+  ]
+
+config :mediate,
+  openai_key: "test-key"
 
 # Disable swoosh api client as it is only required for production adapters
 config :swoosh, :api_client, false

@@ -40,10 +40,12 @@ defmodule Mediate.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:ecto_sql, "~> 3.10"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
+      {:faker, "~> 0.18", only: :test},
       {:finch, "~> 0.13"},
       {:floki, ">= 0.30.0", only: :test},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
+      {:mix_test_watch, "~> 1.2", only: [:dev, :test], runtime: false},
       {:phoenix_ecto, "~> 4.5"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
@@ -52,6 +54,7 @@ defmodule Mediate.MixProject do
       {:phoenix, "~> 1.7.14"},
       {:picosat_elixir, "~> 0.2"},
       {:postgrex, ">= 0.0.0"},
+      {:req, "~> 0.5.2"},
       {:swoosh, "~> 1.5"},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
@@ -78,7 +81,10 @@ defmodule Mediate.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
+      "assets.setup": [
+        "tailwind.install --if-missing",
+        "esbuild.install --if-missing"
+      ],
       "assets.build": ["tailwind mediate", "esbuild mediate"],
       "assets.deploy": [
         "tailwind mediate --minify",

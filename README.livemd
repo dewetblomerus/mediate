@@ -8,7 +8,9 @@ alias Mediate.Chat.Message
 alias Mediate.Accounts.User
 require Ash.Query
 
-user = User.get_by!(%{email: "dewetblomerus+marysol@gmail.com"})
+# user = User.get_by!(%{email: "dewetblomerus@gmail.com"})
+
+user = User.get_by!(%{id: 1})
 ```
 
 ```elixir
@@ -17,7 +19,7 @@ user = User.get_by!(%{email: "dewetblomerus+marysol@gmail.com"})
 #     :threads
 #   ], actor: user)
 
-Thread.for_mediator!(actor: user)
+# thread = Thread.for_mediator!(actor: user)
 ```
 
 ```elixir
@@ -59,7 +61,18 @@ thread_id = 2
 # |> Ash.Query.select([:id, :name])
 # |> Ash.read!()
 
-Message.for_thread!(%{thread_id: thread_id})
+# Message.for_thread!(%{thread_id: thread_id})
+
+Message
+|> Ash.Changeset.for_create(:create, %{body: "thebody", sender_id: 1, thread_id: 2})
+```
+
+```elixir
+alias Mediate.OpenAi
+
+# OpenAi.generate("something")
+
+user = User.get_by!(%{id: "1"})
 ```
 
 ## Local Development

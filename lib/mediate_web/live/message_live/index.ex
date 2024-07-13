@@ -25,26 +25,35 @@ defmodule MediateWeb.MessageLive.Index do
     >
       <.input field={@form[:body]} type="text" label="Body" />
 
-      <:actions>
+      <%!-- <:actions>
         <.button phx-disable-with="Saving...">Save Message</.button>
-      </:actions>
+      </:actions> --%>
     </.simple_form>
-    <.link patch={~p"/#{@thread_id}/suggest"}>Suggest</.link>
+
+    <.link patch={~p"/#{@thread_id}/translate"}>
+      <.button>Translate</.button>
+    </.link>
 
     <.modal
-      :if={@live_action == :suggest}
+      :if={@live_action == :translate}
       id="message-modal"
       show
       on_cancel={JS.patch(~p"/#{@thread_id}")}
     >
       <.live_component
         module={MediateWeb.MessageLive.FormComponent}
-        id={@thread.id}
-        title={@page_title}
-        current_user={@current_user}
         action={@live_action}
+        current_user={@current_user}
+        id={(@message && @message.id) || :new}
+        message={@message}
+        sender_id={@current_user.id}
+        suggested_message_body={@suggested_message_body}
+        choices={[]}
+        form={@form}
+        thread_id={@thread_id}
         thread={@thread}
-        patch={~p"/#{@thread_id}/suggest"}
+        title={@page_title}
+        patch={~p"/messages"}
       />
     </.modal>
     """
@@ -60,7 +69,7 @@ defmodule MediateWeb.MessageLive.Index do
 
     participants =
       User
-      |> Ash.Query.for_read(:for_thread, %{thread_id: 2})
+      |> Ash.Query.for_read(:for_thread, %{thread_id: thread_id})
       |> Ash.Query.select([:id, :name, :picture])
       |> Ash.read!()
       |> Enum.reduce(%{}, fn participant, acc ->
@@ -71,6 +80,7 @@ defmodule MediateWeb.MessageLive.Index do
      socket
      |> assign(%{
        message: nil,
+       suggested_message_body: nil,
        participants: participants,
        thread_id: thread_id,
        thread: thread
@@ -100,9 +110,9 @@ defmodule MediateWeb.MessageLive.Index do
     |> assign(:message, nil)
   end
 
-  defp apply_action(socket, :suggest, _params) do
+  defp apply_action(socket, :translate, _params) do
     socket
-    |> assign(:page_title, "Suggested Message")
+    |> assign(:page_title, "Translate Message")
     |> assign(:message, nil)
   end
 
@@ -115,10 +125,15 @@ defmodule MediateWeb.MessageLive.Index do
   end
 
   @impl true
-  def handle_event("validate", %{"message" => message_params}, socket) do
+  def handle_event(
+        "validate",
+        %{"message" => %{"body" => suggested_message_body} = message_params},
+        socket
+      ) do
     {:noreply,
      assign(socket,
-       form: AshPhoenix.Form.validate(socket.assigns.form, message_params)
+       form: AshPhoenix.Form.validate(socket.assigns.form, message_params),
+       suggested_message_body: suggested_message_body
      )}
   end
 
@@ -129,34 +144,36 @@ defmodule MediateWeb.MessageLive.Index do
         "sender_id" => socket.assigns.current_user.id
       })
 
-    dbg(socket.assigns.thread)
-    dbg(message_params)
-    dbg(socket.assigns.current_user)
+    case AshPhoenix.Form.submit(socket.assigns.form, params: message_params) do
+      {:ok, message} ->
+        socket =
+          socket
+          |> put_flash(
+            :info,
+            "Message #{socket.assigns.form.source.type}d successfully"
+          )
+          |> assign_form()
 
-    Generator.generate(
-      socket.assigns.thread,
-      message_params,
-      socket.assigns.current_user
-    )
-    |> dbg()
+        {:noreply, stream_insert(socket, :messages, message)}
 
-    # case AshPhoenix.Form.submit(socket.assigns.form, params: message_params) do
-    #   {:ok, message} ->
-    #     socket =
-    #       socket
-    #       |> put_flash(
-    #         :info,
-    #         "Message #{socket.assigns.form.source.type}d successfully"
-    #       )
-    #       |> assign_form()
+      {:error, form} ->
+        {:noreply, assign(socket, form: form)}
+    end
+  end
 
-    #     {:noreply, stream_insert(socket, :messages, message)}
+  @impl true
+  def handle_event("send_suggestion", %{"body" => message_body}, socket) do
+    {:ok, message} =
+      Message.create(%{
+        body: message_body,
+        thread_id: socket.assigns.thread_id,
+        sender_id: socket.assigns.current_user.id
+      })
 
-    #   {:error, form} ->
-    #     {:noreply, assign(socket, form: form)}
-    # end
-
-    {:noreply, socket}
+    {:noreply,
+     socket
+     |> stream_insert(:messages, message)
+     |> push_patch(to: ~p"/#{socket.assigns.thread_id}")}
   end
 
   defp assign_form(%{assigns: %{message: _message}} = socket) do

@@ -11,6 +11,7 @@ defmodule Mediate.OpenAi do
           max_tokens: 500,
           messages: messages,
           model: "gpt-4o",
+          # temperature: 0.1,
           user: "#{user_id}"
         }
       ]

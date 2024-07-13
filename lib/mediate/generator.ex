@@ -6,7 +6,6 @@ defmodule Mediate.Generator do
   def generate(
         %Thread{} = raw_thread,
         %{
-          "sender_id" => sender_id,
           "body" => proposed_message_body
         },
         %User{} = sender
@@ -36,31 +35,27 @@ defmodule Mediate.Generator do
     #{thread.mediator_notes}
 
     Here is the proposed next message in the conversation from #{identified_name(sender)}:
+    --- Begin proposed message ---
     #{proposed_message_body}
+    --- End proposed message ---
 
-    Your job is to come up with a re-worded message, or just repeat the proposed
-    message if it already serves the goal.
+    Your job is to re-word the proposed message if needed to help the reader
+    understand what the author meant.
 
-    The goal is to let the parties reach an understanding between themselves.
+    The re-worded message should be written from #{identified_name(sender)} and
+    addressed to the other party in the conversation.
 
-    Address your message to the same participant that
-    #{identified_name(sender)} addressed their proposed message to.
-
+    - Do not respond to the proposed message in any way, only re-word it.
     - Do not address #{identified_name(sender)} in your revised message.
     - Do not make statements coming from yourself in your revised message.
-    - Do not change the topic of the conversation in your revised message.
+    - Do not change any of the main points in the proposed message.
     - Maintain the intent of the proposed message in your revised message.
-    - Do not try to be an expert and drive the conversation to a resolution,
-    just help the parties to acknowledge each other's perspectives and
-    state their own points in a way that is understood by others.
+    - Include all the points from the proposed message in your revised message.
+    - Do not try to be an expert and drive the conversation to a resolution.
     - Do not say anything about the message like: 'Here is a response from
     #{sender.name} to the previous message.
-    - Keep the message addressed to the same participant that the proposed
-    - If the proposed message does not already contain it, and the previous
-    message had a point that has not been acknowledged, include acknowledgement
-    of that point in your revised message
-
-    Your message should be at most 3 times as long as the proposed message.
+    - Take any insults out of the proposed message.
+    - Your message should be at most 3 times as long as the proposed message.
     """
 
     transformed_messages =
@@ -72,7 +67,7 @@ defmodule Mediate.Generator do
       | transformed_messages
     ]
 
-    response = OpenAi.generate(messages, sender_id)
+    response = OpenAi.generate(messages, sender.id)
   end
 
   defp identified_name(%User{} = user) do

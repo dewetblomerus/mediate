@@ -32,7 +32,9 @@ defmodule Mediate.Generator do
     #{user_name_list} have come to #{identified_name(mediator)} for mediation.
 
     Here are #{identified_name(mediator)}'s notes about the situation:
+    --- Begin mediator notes ---
     #{thread.mediator_notes}
+    --- End mediator notes ---
 
     Here is the proposed next message in the conversation from #{identified_name(sender)}:
     --- Begin proposed message ---
@@ -45,6 +47,8 @@ defmodule Mediate.Generator do
     The re-worded message should be written from #{identified_name(sender)} and
     addressed to the other party in the conversation.
 
+    - The mediator notes are extremely important and should take precedence
+    over everything else.
     - Do not respond to the proposed message in any way, only re-word it.
     - Do not address #{identified_name(sender)} in your revised message.
     - Do not make statements coming from yourself in your revised message.

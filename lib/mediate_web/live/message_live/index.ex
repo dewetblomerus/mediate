@@ -3,6 +3,7 @@ defmodule MediateWeb.MessageLive.Index do
   require Ash.Query
   alias Mediate.Accounts.User
   alias Mediate.Chat.Message
+  alias Mediate.Chat.Notifier
 
   @impl true
   def render(assigns) do
@@ -60,6 +61,8 @@ defmodule MediateWeb.MessageLive.Index do
 
   @impl true
   def mount(%{"thread_id" => thread_id}, _session, socket) do
+    if connected?(socket), do: Notifier.subscribe_to_thread(thread_id)
+
     messages =
       Message.for_thread!(%{thread_id: thread_id})
 
@@ -118,6 +121,14 @@ defmodule MediateWeb.MessageLive.Index do
   @impl true
   def handle_info(
         {MediateWeb.MessageLive.FormComponent, {:saved, message}},
+        socket
+      ) do
+    {:noreply, stream_insert(socket, :messages, message)}
+  end
+
+  @impl true
+  def handle_info(
+        {:message_create, message},
         socket
       ) do
     {:noreply, stream_insert(socket, :messages, message)}

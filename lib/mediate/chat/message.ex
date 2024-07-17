@@ -1,4 +1,6 @@
 defmodule Mediate.Chat.Message do
+  alias Mediate.Chat.Notifier
+
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     domain: Mediate.Chat
@@ -21,6 +23,8 @@ defmodule Mediate.Chat.Message do
     create :create do
       accept [:body, :thread_id, :sender_id]
       primary? true
+
+      notifiers [Notifier]
     end
   end
 

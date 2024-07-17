@@ -3,7 +3,6 @@ defmodule MediateWeb.MessageLive.Index do
   require Ash.Query
   alias Mediate.Accounts.User
   alias Mediate.Chat.Message
-  alias Mediate.Generator
 
   @impl true
   def render(assigns) do

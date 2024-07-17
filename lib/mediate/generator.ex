@@ -71,22 +71,16 @@ defmodule Mediate.Generator do
       | transformed_messages
     ]
 
-    response = OpenAi.generate(messages, sender.id)
+    OpenAi.generate(messages, sender.id)
   end
 
   defp identified_name(%User{} = user) do
     "#{user.name} with id #{user.id}"
   end
 
-  defp normalized_name(%User{} = user) do
-    "#{user.name}-#{user.id}"
-    |> String.replace(~r/\s+/, "-")
-  end
-
-  defp transform_message(%Mediate.Chat.Message{} = message, users_map) do
+  defp transform_message(%Mediate.Chat.Message{} = message, _users_map) do
     %{
       content: message.body,
-      # name: normalized_name(users_map[message.sender_id]),
       role: "user"
     }
   end

@@ -1,6 +1,5 @@
 defmodule Mediate.OpenAi do
   def generate(messages, user_id) do
-    # generic_request()
     result =
       [
         method: :post,
@@ -19,17 +18,8 @@ defmodule Mediate.OpenAi do
       |> Req.new()
       |> Req.Request.run_request()
 
-    {_, %Req.Response{body: response_body} = response} = result
+    {_, %Req.Response{body: response_body}} = result
 
     response_body
-  end
-
-  defp generic_request do
-    [
-      options: [
-        auth: {:bearer, Application.fetch_env!(:mediate, :openai_key)}
-      ]
-    ]
-    |> Keyword.merge(Application.get_env(:mediate, :req_options, []))
   end
 end

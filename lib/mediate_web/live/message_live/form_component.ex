@@ -1,7 +1,6 @@
 defmodule MediateWeb.MessageLive.FormComponent do
   use MediateWeb, :live_component
   alias Mediate.Generator
-  alias Mediate.Chat.Message
 
   @impl true
   def render(assigns) do
@@ -106,6 +105,4 @@ defmodule MediateWeb.MessageLive.FormComponent do
 
     response["choices"]
   end
-
-  defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
 end

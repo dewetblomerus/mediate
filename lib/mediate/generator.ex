@@ -5,9 +5,7 @@ defmodule Mediate.Generator do
 
   def generate(
         %Thread{} = raw_thread,
-        %{
-          "body" => proposed_message_body
-        },
+        proposed_message_body,
         %User{} = sender
       ) do
     thread =
@@ -47,9 +45,8 @@ defmodule Mediate.Generator do
     The re-worded message should be written from #{identified_name(sender)} and
     addressed to the other party in the conversation.
 
-    - The mediator notes are extremely important and should take precedence
-    over everything else.
-    - Do not respond to the proposed message in any way, only re-word it.
+    - Do not respond to the proposed message in any way, only re-word it
+      if needed .
     - Do not address #{identified_name(sender)} in your revised message.
     - Do not make statements coming from yourself in your revised message.
     - Do not change any of the main points in the proposed message.

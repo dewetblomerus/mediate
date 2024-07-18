@@ -4,7 +4,7 @@ defmodule MediateWeb.MessageLive.FormComponent do
 
   @impl true
   def render(assigns) do
-    choices = get_choices(assigns.form.params, assigns)
+    choices = get_choices(assigns)
     assigns = Map.put(assigns, :choices, choices)
 
     ~H"""
@@ -23,7 +23,7 @@ defmodule MediateWeb.MessageLive.FormComponent do
         phx-change="validate"
         phx-submit="generate"
       >
-        <.input field={@form[:body]} type="text" label="Body" />
+        <.input field={@form[:body]} type="text" label="Body" value={@suggested_message_body} />
 
         <:actions>
           <.button phx-disable-with="Generating...">Generate translation</.button>
@@ -45,13 +45,6 @@ defmodule MediateWeb.MessageLive.FormComponent do
   end
 
   @impl true
-  def update(assigns, socket) do
-    {:ok,
-     socket
-     |> assign(assigns)}
-  end
-
-  @impl true
   def handle_event("validate", %{"message" => message_params}, socket) do
     {:noreply,
      assign(socket,
@@ -61,45 +54,15 @@ defmodule MediateWeb.MessageLive.FormComponent do
 
   @impl true
   def handle_event("generate", %{"message" => message_params}, socket) do
-    response =
-      Generator.generate(
-        socket.assigns.thread,
-        message_params,
-        socket.assigns.current_user
-      )
-
-    choices =
-      response["choices"]
-
-    # case AshPhoenix.Form.submit(socket.assigns.form, params: message_params) do
-    #   {:ok, message} ->
-    #     notify_parent({:saved, message})
-
-    #     socket =
-    #       socket
-    #       |> put_flash(
-    #         :info,
-    #         "Message #{socket.assigns.form.source.type}d successfully"
-    #       )
-    #       |> push_patch(to: socket.assigns.patch)
-
-    #     {:noreply, socket}
-
-    #   {:error, form} ->
-    #     {:noreply, assign(socket, form: form)}
-    # end
+    choices = get_choices(socket.assigns)
     {:noreply, assign(socket, :choices, choices)}
   end
 
-  defp get_choices(message_params, _assigns) when message_params == %{} do
-    []
-  end
-
-  defp get_choices(message_params, assigns) do
+  defp get_choices(assigns) do
     response =
       Generator.generate(
         assigns.thread,
-        message_params,
+        assigns.suggested_message_body,
         assigns.current_user
       )
 

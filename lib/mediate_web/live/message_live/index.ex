@@ -17,22 +17,19 @@ defmodule MediateWeb.MessageLive.Index do
       </:col>
     </.table>
 
-    <.simple_form
-      for={@form}
-      id="message-form"
-      phx-change="validate"
-      phx-submit="save"
-    >
-      <.input field={@form[:body]} type="text" label="Body" />
+    <.input
+      name="message_input"
+      value={@suggested_message_body}
+      type="text"
+      id="user-suggested-message"
+      phx-keyup="update_user_suggestion"
+    />
 
-      <%!-- <:actions>
-        <.button phx-disable-with="Saving...">Save Message</.button>
-      </:actions> --%>
-    </.simple_form>
-
+    <%= if is_binary(@suggested_message_body) && String.length(@suggested_message_body) > 5 do %>
     <.link patch={~p"/#{@thread_id}/translate"}>
       <.button>Translate</.button>
     </.link>
+    <% end %>
 
     <.modal
       :if={@live_action == :translate}
@@ -147,6 +144,24 @@ defmodule MediateWeb.MessageLive.Index do
      )}
   end
 
+  @impl true
+  def handle_event(
+        "update_user_suggestion",
+        %{"key" => "Enter", "value" => user_suggested_message},
+        socket
+      ) do
+    {:noreply, push_patch(socket, to: ~p"/#{socket.assigns.thread_id}/translate")}
+  end
+
+  @impl true
+  def handle_event(
+        "update_user_suggestion",
+        %{"value" => user_suggested_message},
+        socket
+      ) do
+    {:noreply, assign(socket, :suggested_message_body, user_suggested_message)}
+  end
+
   def handle_event("save", %{"message" => raw_message_params}, socket) do
     message_params =
       Map.merge(raw_message_params, %{
@@ -182,6 +197,7 @@ defmodule MediateWeb.MessageLive.Index do
 
     {:noreply,
      socket
+     |> assign(:suggested_message_body, "")
      |> stream_insert(:messages, message)
      |> push_patch(to: ~p"/#{socket.assigns.thread_id}")}
   end

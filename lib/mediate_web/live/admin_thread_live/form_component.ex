@@ -21,7 +21,7 @@ defmodule MediateWeb.AdminThreadLive.FormComponent do
       >
         <.input field={@form[:name]} type="text" label="Name" />
 
-        <.input field={@form[:mediator_notes]} type="text" label="Mediator notes" />
+        <.input field={@form[:mediator_notes]} type="textarea" label="Mediator notes" />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Thread</.button>

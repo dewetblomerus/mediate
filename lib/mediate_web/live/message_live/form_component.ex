@@ -16,19 +16,13 @@ defmodule MediateWeb.MessageLive.FormComponent do
         </:subtitle>
       </.header>
 
-      <.simple_form
-        for={@form}
-        id="message-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="generate"
-      >
-        <.input field={@form[:body]} type="text" label="Body" value={@suggested_message_body} />
-
-        <:actions>
-          <.button phx-disable-with="Generating...">Generate translation</.button>
-        </:actions>
-      </.simple_form>
+    <.input
+      name="message_input"
+      value={@suggested_message_body}
+      type="text"
+      id="user-suggested-message"
+      phx-keyup="update_user_suggestion"
+    />
 
       <%= for choice <- @choices do %>
         <div><%= choice["message"]["content"] %></div>
@@ -42,14 +36,6 @@ defmodule MediateWeb.MessageLive.FormComponent do
       <% end %>
     </div>
     """
-  end
-
-  @impl true
-  def handle_event("validate", %{"message" => message_params}, socket) do
-    {:noreply,
-     assign(socket,
-       form: AshPhoenix.Form.validate(socket.assigns.form, message_params)
-     )}
   end
 
   @impl true

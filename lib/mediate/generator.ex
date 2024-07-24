@@ -39,20 +39,19 @@ defmodule Mediate.Generator do
     #{proposed_message_body}
     --- End proposed message ---
 
-    Your job is to re-word the proposed message if needed to help the reader
-    understand what the author meant.
+    Your job is to re-word the proposed message if needed.
 
-    The re-worded message should be written from #{identified_name(sender)} and
-    addressed to the other party in the conversation.
-
+    - The re-worded message should be written from #{identified_name(sender)} and
+      addressed to the other party in the conversation.
     - Do not respond to the proposed message in any way, only re-word it
-      if needed .
+      if needed.
+    - Do not repeat previous messages, unless the proposed message is also
+      a repitition of a previous message.
     - Do not address #{identified_name(sender)} in your revised message.
     - Do not make statements coming from yourself in your revised message.
     - Do not change any of the main points in the proposed message.
     - Maintain the intent of the proposed message in your revised message.
     - Include all the points from the proposed message in your revised message.
-    - Do not try to be an expert and drive the conversation to a resolution.
     - Do not say anything about the message like: 'Here is a response from
     #{sender.name} to the previous message.
     - Take any insults out of the proposed message.

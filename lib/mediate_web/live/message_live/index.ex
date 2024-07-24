@@ -21,7 +21,7 @@ defmodule MediateWeb.MessageLive.Index do
       name="message_input"
       value={@suggested_message_body}
       type="text"
-      id="user-suggested-message"
+      id="user-suggested-message-input"
       phx-keyup="update_user_suggestion"
     />
 

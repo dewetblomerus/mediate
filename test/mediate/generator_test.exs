@@ -67,13 +67,9 @@ defmodule Mediate.GeneratorTest do
 
     sender = users |> hd()
 
-    message_params = %{
-      "thread_id" => thread.id,
-      "sender_id" => sender.id,
-      "body" => "I don't want to talk about this right now"
-    }
+    suggested_message_body = "I don't want to talk about this right now"
 
-    result = Mediate.Generator.generate(thread, message_params, sender)
+    result = Mediate.Generator.generate(thread, suggested_message_body, sender)
 
     assert %{"mock" => "response"} = result
   end

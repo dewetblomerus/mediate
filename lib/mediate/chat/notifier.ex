@@ -1,7 +1,5 @@
 defmodule Mediate.Chat.Notifier do
   alias Ash.Notifier.Notification
-  alias Ash.Resource.Actions.Create
-  alias Mediate.Chat.Message
   alias Phoenix.PubSub
 
   def notify(

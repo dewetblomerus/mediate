@@ -39,7 +39,7 @@ defmodule MediateWeb.MessageLive.FormComponent do
   end
 
   @impl true
-  def handle_event("generate", %{"message" => message_params}, socket) do
+  def handle_event("generate", %{}, socket) do
     choices = get_choices(socket.assigns)
     {:noreply, assign(socket, :choices, choices)}
   end

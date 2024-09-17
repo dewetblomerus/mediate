@@ -147,7 +147,7 @@ defmodule MediateWeb.MessageLive.Index do
   @impl true
   def handle_event(
         "update_user_suggestion",
-        %{"key" => "Enter", "value" => user_suggested_message},
+        %{"key" => "Enter"},
         socket
       ) do
     {:noreply, push_patch(socket, to: ~p"/#{socket.assigns.thread_id}/translate")}

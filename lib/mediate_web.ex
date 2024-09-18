@@ -85,6 +85,7 @@ defmodule MediateWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import MediateWeb.CoreComponents
+      import MediateWeb.MyComponents
       import MediateWeb.Gettext
 
       # Shortcut for generating JS commands

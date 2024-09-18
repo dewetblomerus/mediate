@@ -1,17 +1,14 @@
-defmodule Mediate.OpenAi do
-  def generate(messages, user_id) do
+defmodule Mediate.Mistral do
+  def generate(messages, _user_id) do
     result =
       [
         method: :post,
         url: "/v1/chat/completions",
-        base_url: "https://api.openai.com",
-        auth: {:bearer, Application.fetch_env!(:mediate, :openai_key)},
+        base_url: "https://api.mistral.ai",
+        auth: {:bearer, Application.fetch_env!(:mediate, :mistral_api_key)},
         json: %{
-          max_tokens: 500,
-          messages: messages,
-          model: "gpt-4o",
-          # temperature: 0.1,
-          user: "#{user_id}"
+          model: "mistral-large-latest",
+          messages: messages
         }
       ]
       |> Keyword.merge(Application.get_env(:mediate, :req_options, []))

@@ -1,7 +1,9 @@
 defmodule Mediate.Generator do
   alias Mediate.Chat.Thread
-  alias Mediate.OpenAi
   alias Mediate.Accounts.User
+
+  @api_client Mediate.OpenAi
+  # @api_client Mediate.Mistral
 
   def generate(
         %Thread{} = raw_thread,
@@ -56,6 +58,7 @@ defmodule Mediate.Generator do
     #{sender.name} to the previous message.
     - Take any insults out of the proposed message.
     - Your message should be at most 3 times as long as the proposed message.
+    - Your revised message should not include anything that marks it's start or end.
     """
 
     transformed_messages =
@@ -67,7 +70,7 @@ defmodule Mediate.Generator do
       | transformed_messages
     ]
 
-    OpenAi.generate(messages, sender.id)
+    @api_client.generate(messages, sender.id)
   end
 
   defp identified_name(%User{} = user) do

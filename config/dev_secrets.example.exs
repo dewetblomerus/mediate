@@ -9,4 +9,5 @@ config :mediate,
   }
 
 config :mediate,
-  openapi_key: "your-openai-api-key"
+  openapi_key: "your-openai-api-key",
+  mistral_api_key: "your-mistral-api-key"

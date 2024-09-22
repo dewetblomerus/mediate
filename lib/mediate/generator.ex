@@ -11,7 +11,7 @@ defmodule Mediate.Generator do
         %User{} = sender
       ) do
     thread =
-      Ash.load!(raw_thread, [:mediator, :users, :messages])
+      Ash.load!(raw_thread, [:mediator, :users, messages: [:sender]])
 
     mediator = thread.mediator
 
@@ -73,13 +73,14 @@ defmodule Mediate.Generator do
     @api_client.generate(messages, sender.id)
   end
 
-  defp identified_name(%User{} = user) do
+  def identified_name(%User{} = user) do
     "#{user.name} with id #{user.id}"
   end
 
   defp transform_message(%Mediate.Chat.Message{} = message, _users_map) do
     %{
       content: message.body,
+      name: identified_name(message.sender),
       role: "user"
     }
   end

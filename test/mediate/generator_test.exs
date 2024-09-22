@@ -17,7 +17,37 @@ defmodule Mediate.GeneratorTest do
   end
 
   test "generate", %{users: users, admin_user: admin_user} do
+    [user1, user2] = users
+    user1_identified_name = Mediate.Generator.identified_name(user1)
+    user2_identified_name = Mediate.Generator.identified_name(user2)
+
     Req.Test.stub(Mediate.OpenAi, fn conn ->
+      {:ok, body, _} = Plug.Conn.read_body(conn)
+      json_body = Jason.decode!(body)
+      user1_id = "#{user1.id}"
+
+      assert %{
+               "model" => "gpt-4o",
+               "max_tokens" => 500,
+               "user" => ^user1_id,
+               "messages" => [
+                 %{
+                   "content" => _system_message,
+                   "role" => "system"
+                 },
+                 %{
+                   "content" => "I would like to have 100% for myself",
+                   "name" => ^user1_identified_name,
+                   "role" => "user"
+                 },
+                 %{
+                   "content" => "I would like to have 100% for myself",
+                   "name" => ^user2_identified_name,
+                   "role" => "user"
+                 }
+               ]
+             } = json_body
+
       assert %Plug.Conn{
                halted: false,
                host: "api.openai.com",
@@ -65,12 +95,14 @@ defmodule Mediate.GeneratorTest do
       })
     end)
 
-    sender = users |> hd()
+    sender = user1
 
     suggested_message_body = "I don't want to talk about this right now"
 
     result = Mediate.Generator.generate(thread, suggested_message_body, sender)
 
     assert %{"mock" => "response"} = result
+
+    Req.Test.verify!(Mediate.OpenAi)
   end
 end

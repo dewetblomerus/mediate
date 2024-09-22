@@ -18,8 +18,13 @@ defmodule Mediate.OpenAi do
       |> Req.new()
       |> Req.Request.run_request()
 
-    {%Req.Request{}, %Req.Response{body: response_body}} = result
+    case result do
+      {%Req.Request{}, %Req.Response{body: response_body, status: 200}} ->
+        response_body
 
-    response_body
+        {_, response} ->
+          dbg(response)
+          raise "OpenAI request failed"
+    end
   end
 end

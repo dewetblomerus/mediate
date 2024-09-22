@@ -74,7 +74,8 @@ defmodule Mediate.Generator do
   end
 
   def identified_name(%User{} = user) do
-    "#{user.name} with id #{user.id}"
+    "#{user.name}-#{user.id}"
+    |> String.replace(" ", "-")
   end
 
   defp transform_message(%Mediate.Chat.Message{} = message, _users_map) do

@@ -20,5 +20,5 @@ defmodule MediateWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :mediate
+  use Gettext.Backend, otp_app: :mediate
 end

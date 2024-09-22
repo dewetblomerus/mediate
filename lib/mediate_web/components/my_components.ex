@@ -30,7 +30,7 @@ defmodule MediateWeb.MyComponents do
       >
         Threads
       </a>
-      <%= if @current_user && AdminChecker.is_super_user?(@current_user) do %>
+      <%= if @current_user && AdminChecker.super_user?(@current_user) do %>
         <a
           href="/admin/threads"
           class="text-white text-xl hover:text-grey-200 active:text-grey-400"

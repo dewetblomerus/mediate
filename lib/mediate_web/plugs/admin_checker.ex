@@ -7,14 +7,14 @@ defmodule Mediate.AdminChecker do
     opts
   end
 
-  def is_super_user?(%Mediate.Accounts.User{
+  def super_user?(%Mediate.Accounts.User{
         email: %Ash.CiString{string: "dewetblomerus@gmail.com"},
         email_verified: true
       }) do
     true
   end
 
-  def is_super_user?(_) do
+  def super_user?(_) do
     false
   end
 
@@ -22,7 +22,7 @@ defmodule Mediate.AdminChecker do
     current_user =
       conn.assigns.current_user
 
-    if is_super_user?(current_user) do
+    if super_user?(current_user) do
       conn
     else
       redirect_and_halt(conn)

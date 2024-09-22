@@ -1,9 +1,12 @@
 defmodule MediateWeb.MessageLive.Index do
   use MediateWeb, :live_view
+
   require Ash.Query
+
   alias Mediate.Accounts.User
   alias Mediate.Chat.Message
   alias Mediate.Chat.Notifier
+  alias Mediate.Chat.Thread
 
   @impl true
   def render(assigns) do
@@ -64,7 +67,7 @@ defmodule MediateWeb.MessageLive.Index do
       Message.for_thread!(%{thread_id: thread_id})
 
     thread =
-      Mediate.Chat.Thread.get_by!(%{id: thread_id})
+      Thread.get_by!(%{id: thread_id})
 
     participants =
       User

@@ -1,6 +1,6 @@
 defmodule Mediate.Generator do
-  alias Mediate.Chat.Thread
   alias Mediate.Accounts.User
+  alias Mediate.Chat.Thread
 
   @api_client Mediate.OpenAi
   # @api_client Mediate.Mistral
@@ -15,10 +15,7 @@ defmodule Mediate.Generator do
 
     mediator = thread.mediator
 
-    user_name_list =
-      thread.users
-      |> Enum.map(&identified_name/1)
-      |> Enum.join(" and ")
+    user_name_list = Enum.map_join(thread.users, " and ", &identified_name/1)
 
     users_map =
       thread.users

@@ -23,7 +23,7 @@ defmodule Mediate.OpenAi do
         response_body
 
       {_, response} ->
-        dbg(response)
+        inspect(response)
         raise "OpenAI request failed"
     end
   end

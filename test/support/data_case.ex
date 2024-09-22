@@ -16,6 +16,8 @@ defmodule Mediate.DataCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
       alias Mediate.Repo
@@ -37,11 +39,11 @@ defmodule Mediate.DataCase do
   """
   def setup_sandbox(tags) do
     pid =
-      Ecto.Adapters.SQL.Sandbox.start_owner!(Mediate.Repo,
+      Sandbox.start_owner!(Mediate.Repo,
         shared: not tags[:async]
       )
 
-    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+    on_exit(fn -> Sandbox.stop_owner(pid) end)
   end
 
   @doc """

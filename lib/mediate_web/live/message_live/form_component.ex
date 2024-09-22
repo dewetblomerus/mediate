@@ -16,13 +16,13 @@ defmodule MediateWeb.MessageLive.FormComponent do
         </:subtitle>
       </.header>
 
-    <.input
-      name="message_input"
-      value={@suggested_message_body}
-      type="text"
-      id="user-suggested-message"
-      phx-keyup="update_user_suggestion"
-    />
+      <.input
+        name="message_input"
+        value={@suggested_message_body}
+        type="text"
+        id="user-suggested-message"
+        phx-keyup="update_user_suggestion"
+      />
 
       <%= for choice <- @choices do %>
         <div><%= choice["message"]["content"] %></div>

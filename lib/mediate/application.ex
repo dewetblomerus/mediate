@@ -10,7 +10,8 @@ defmodule Mediate.Application do
     children = [
       MediateWeb.Telemetry,
       Mediate.Repo,
-      {DNSCluster, query: Application.get_env(:mediate, :dns_cluster_query) || :ignore},
+      {DNSCluster,
+       query: Application.get_env(:mediate, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Mediate.PubSub},
       {AshAuthentication.Supervisor, otp_app: :mediate},
 

@@ -8,14 +8,14 @@ defmodule Mediate.AdminChecker do
   end
 
   def is_super_user?(%Mediate.Accounts.User{
-      email: %Ash.CiString{string: "dewetblomerus@gmail.com"},
-      email_verified: true
-    }) do
+        email: %Ash.CiString{string: "dewetblomerus@gmail.com"},
+        email_verified: true
+      }) do
     true
   end
 
   def is_super_user?(_) do
-   false
+    false
   end
 
   defp check_super_user(conn) do

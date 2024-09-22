@@ -58,7 +58,8 @@ defmodule MediateWeb.Telemetry do
       ),
       summary("mediate.repo.query.decode_time",
         unit: {:native, :millisecond},
-        description: "The time spent decoding the data received from the database"
+        description:
+          "The time spent decoding the data received from the database"
       ),
       summary("mediate.repo.query.query_time",
         unit: {:native, :millisecond},

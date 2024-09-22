@@ -23,9 +23,11 @@ config :mediate, MediateWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "9uM2NoFIRaUW9+Ls6etcEv1+fB1W8L4wZb6azLavfx9YlBrjeXgTNFdZqd3n/Xs4",
+  secret_key_base:
+    "9uM2NoFIRaUW9+Ls6etcEv1+fB1W8L4wZb6azLavfx9YlBrjeXgTNFdZqd3n/Xs4",
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:mediate, ~w(--sourcemap=inline --watch)]},
+    esbuild:
+      {Esbuild, :install_and_run, [:mediate, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:mediate, ~w(--watch)]}
   ]
 

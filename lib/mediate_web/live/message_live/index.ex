@@ -26,9 +26,9 @@ defmodule MediateWeb.MessageLive.Index do
     />
 
     <%= if is_binary(@suggested_message_body) && String.length(@suggested_message_body) > 5 do %>
-    <.link patch={~p"/#{@thread_id}/translate"}>
-      <.button>Translate</.button>
-    </.link>
+      <.link patch={~p"/#{@thread_id}/translate"}>
+        <.button>Translate</.button>
+      </.link>
     <% end %>
 
     <.modal
@@ -150,7 +150,8 @@ defmodule MediateWeb.MessageLive.Index do
         %{"key" => "Enter"},
         socket
       ) do
-    {:noreply, push_patch(socket, to: ~p"/#{socket.assigns.thread_id}/translate")}
+    {:noreply,
+     push_patch(socket, to: ~p"/#{socket.assigns.thread_id}/translate")}
   end
 
   @impl true

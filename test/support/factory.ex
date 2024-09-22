@@ -1,6 +1,6 @@
 defmodule Mediate.Factory do
   alias Mediate.Accounts.User
-  alias Mediate.Practice.Card
+  alias Mediate.Chat.Thread
 
   def admin_user do
     user_info = %{
@@ -42,8 +42,8 @@ defmodule Mediate.Factory do
     |> Ash.create!()
   end
 
-  def thread_factory(user, opts \\ %{}) do
-    Card.create!(
+  def thread_factory(user, _) do
+    Thread.create!(
       %{
         name: Faker.String.base64(40),
         mediator_notes: Faker.String.base64()

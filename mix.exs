@@ -32,9 +32,9 @@ defmodule Mediate.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:credo, ">= 0.0.0", only: [:dev], runtime: false},
-      {:ex_doc, ">= 0.0.0", only: [:dev], runtime: false},
-      {:mix_audit, ">= 0.0.0", only: [:dev], runtime: false},
+      {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:ex_doc, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:mix_audit, ">= 0.0.0", only: [:dev, :test], runtime: false},
       {:ash_authentication_phoenix, "~> 2.0"},
       {:ash_authentication, "~> 4.0"},
       {:ash_postgres, "~> 2.0"},
@@ -43,7 +43,7 @@ defmodule Mediate.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:ecto_sql, "~> 3.10"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:ex_check, "~> 0.16.0", only: [:dev], runtime: false},
+      {:ex_check, "~> 0.16.0", only: [:dev, :test], runtime: false},
       {:faker, "~> 0.18", only: :test},
       {:finch, "~> 0.13"},
       {:floki, ">= 0.30.0", only: :test},

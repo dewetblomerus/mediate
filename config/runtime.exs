@@ -32,25 +32,19 @@ if config_env() != :test do
   config :mediate,
     mistral_api_key: System.fetch_env!("MISTRAL_API_KEY"),
     openai_key: System.fetch_env!("OPENAI_API_KEY")
-end
-
-if config_env() == :prod do
-  database_url =
-    System.get_env("DATABASE_URL") ||
-      raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
-      """
 
   maybe_ipv6 =
     if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
   config :mediate, Mediate.Repo,
-    # ssl: true,
-    url: database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+    hostname: System.fetch_env!("DB_HOSTNAME"),
+    password: System.fetch_env!("DB_PASSWORD"),
+    username: System.fetch_env!("DB_USERNAME"),
+    pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
     socket_options: maybe_ipv6
+end
 
+if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
   # want to use a different value for prod and you most likely don't want

@@ -6,6 +6,21 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
+# Set default Phoenix environment (can be overridden at runtime)
+ENV MIX_ENV=dev
+ENV PHX_SERVER=true
+
+# Default database configuration for development (override via docker-compose or runtime)
+ENV DB_SSL=true
+
+# Default Phoenix configuration
+ENV PHX_HOST=localhost
+ENV PORT=4000
+
+# Auth0 non-secret configuration
+ENV AUTH0_REDIRECT_URI=http://localhost:4000/auth
+ENV AUTH0_BASE_URL=https://dewet-dev.us.auth0.com
+
 # Install system dependencies and development tools
 RUN apt-get update && apt-get install -y \
     # Core system tools

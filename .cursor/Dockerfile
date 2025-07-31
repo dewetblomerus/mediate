@@ -71,12 +71,15 @@ RUN mix local.hex --force && \
 # Install Phoenix generator
 RUN mix archive.install hex phx_new --force
 
-# Set the working directory
-WORKDIR /app
-
-# Create a non-root user for development (optional but recommended)
+# Create a non-root user for development (recommended for background agents)
 RUN useradd -m -s /bin/bash developer && \
     echo 'developer ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Switch to the developer user
+USER developer
+
+# Set the working directory to the user's home directory
+WORKDIR /home/developer
 
 # Expose Phoenix default port
 EXPOSE 4000
@@ -85,7 +88,7 @@ EXPOSE 4000
 CMD ["/bin/bash"]
 
 # Development notes:
-# - Clone your repository after building: git clone <your-repo> /app
+# - Clone your repository after building: git clone <your-repo> /home/developer/project
 # - Run mix setup to install dependencies and set up the database
 # - Start the server with: mix phx.server
 # - Access the application at http://localhost:4000

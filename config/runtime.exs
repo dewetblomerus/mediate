@@ -43,7 +43,6 @@ if config_env() != :test do
     end
 
   config :mediate, Mediate.Repo,
-    database: System.fetch_env!("DB_NAME"),
     hostname: System.fetch_env!("DB_HOST"),
     password: System.fetch_env!("DB_PASSWORD"),
     ssl: ssl_opts,

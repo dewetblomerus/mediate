@@ -1,5 +1,5 @@
 # Development Dockerfile for Mediate Elixir/Phoenix Application
-FROM hexpm/elixir:1.17.2-erlang-27.0.1-ubuntu-jammy-20240808
+FROM hexpm/elixir:1.18.3-erlang-27.3.3-ubuntu-jammy-20240808
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive

@@ -36,10 +36,18 @@ if config_env() != :test do
   maybe_ipv6 =
     if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
+  ssl_opts =
+    case System.get_env("DB_SSL", "true") do
+      "true" -> [verify: :verify_none]
+      _ -> false
+    end
+
   config :mediate, Mediate.Repo,
-    hostname: System.fetch_env!("DB_HOSTNAME"),
+    database: System.fetch_env!("DB_NAME"),
+    hostname: System.fetch_env!("DB_HOST"),
     password: System.fetch_env!("DB_PASSWORD"),
-    username: System.fetch_env!("DB_USERNAME"),
+    ssl: ssl_opts,
+    username: System.fetch_env!("DB_USER"),
     pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
     socket_options: maybe_ipv6
 end

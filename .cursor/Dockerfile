@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y \
     # Process monitoring
     procps \
     # Network tools
-    netcat \
+    netcat-openbsd \
     telnet \
     # Compression tools
     zip \

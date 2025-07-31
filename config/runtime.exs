@@ -20,6 +20,20 @@ if System.get_env("PHX_SERVER") do
   config :mediate, MediateWeb.Endpoint, server: true
 end
 
+if config_env() != :test do
+  config :mediate,
+    auth0: %{
+      client_id: System.fetch_env!("AUTH0_CLIENT_ID"),
+      client_secret: System.fetch_env!("AUTH0_CLIENT_SECRET"),
+      redirect_uri: System.fetch_env!("AUTH0_REDIRECT_URI"),
+      base_url: System.fetch_env!("AUTH0_BASE_URL")
+    }
+
+  config :mediate,
+    mistral_api_key: System.fetch_env!("MISTRAL_API_KEY"),
+    openai_key: System.fetch_env!("OPENAI_API_KEY")
+end
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

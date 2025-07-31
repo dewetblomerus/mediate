@@ -58,6 +58,8 @@ RUN apt-get update && apt-get install -y \
     less \
     # Shell utilities
     zsh \
+    # File system watching (for Phoenix live-reload)
+    inotify-tools \
     # Cleanup
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*

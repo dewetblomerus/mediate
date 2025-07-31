@@ -56,21 +56,6 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install asdf version manager for development flexibility
-RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0 \
-    && echo '. ~/.asdf/asdf.sh' >> ~/.bashrc \
-    && echo '. ~/.asdf/completions/asdf.bash' >> ~/.bashrc
-
-# Add asdf to PATH
-ENV PATH="/root/.asdf/bin:/root/.asdf/shims:$PATH"
-
-# Install rebar3 and hex for Elixir development
-RUN mix local.hex --force && \
-    mix local.rebar --force
-
-# Install Phoenix generator
-RUN mix archive.install hex phx_new --force
-
 # Create a non-root user for development (recommended for background agents)
 RUN useradd -m -s /bin/bash developer && \
     echo 'developer ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
@@ -80,6 +65,15 @@ USER developer
 
 # Set the working directory to the user's home directory
 WORKDIR /home/developer
+
+
+
+# Install rebar3 and hex for Elixir development as developer user
+RUN mix local.hex --force && \
+    mix local.rebar --force
+
+# Install Phoenix generator as developer user
+RUN mix archive.install hex phx_new --force
 
 # Expose Phoenix default port
 EXPOSE 4000

@@ -73,29 +73,17 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Create a non-root user for development (recommended for background agents)
-RUN useradd -m -s /bin/bash developer && \
-    echo 'developer ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-# Switch to the developer user
-USER developer
-
-# Set the working directory to the user's home directory
-WORKDIR /home/developer
+# Set the working directory
+WORKDIR /workspace
 
 
 
-# Install rebar3 and hex for Elixir development as developer user
+# Install rebar3 and hex for Elixir development
 RUN mix local.hex --force && \
     mix local.rebar --force
 
-# Install Phoenix generator as developer user
+# Install Phoenix generator
 RUN mix archive.install hex phx_new --force
-
-# Ensure developer user has permissions for workspace directory (used by Cursor)
-USER root
-RUN mkdir -p /workspace && chown -R developer:developer /workspace
-USER developer
 
 # Expose Phoenix default port
 EXPOSE 4000

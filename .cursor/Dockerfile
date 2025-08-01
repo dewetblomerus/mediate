@@ -92,6 +92,11 @@ RUN mix local.hex --force && \
 # Install Phoenix generator as developer user
 RUN mix archive.install hex phx_new --force
 
+# Ensure developer user has permissions for workspace directory (used by Cursor)
+USER root
+RUN mkdir -p /workspace && chown -R developer:developer /workspace
+USER developer
+
 # Expose Phoenix default port
 EXPOSE 4000
 

@@ -32,24 +32,24 @@ if config_env() != :test do
   config :mediate,
     mistral_api_key: System.fetch_env!("MISTRAL_API_KEY"),
     openai_key: System.fetch_env!("OPENAI_API_KEY")
-
-  maybe_ipv6 =
-    if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
-
-  ssl_opts =
-    case System.get_env("DB_SSL", "true") do
-      "true" -> [verify: :verify_none]
-      _ -> false
-    end
-
-  config :mediate, Mediate.Repo,
-    hostname: System.fetch_env!("DB_HOST"),
-    password: System.fetch_env!("DB_PASSWORD"),
-    ssl: ssl_opts,
-    username: System.fetch_env!("DB_USER"),
-    pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
-    socket_options: maybe_ipv6
 end
+
+maybe_ipv6 =
+  if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
+
+ssl_opts =
+  case System.get_env("DB_SSL", "true") do
+    "true" -> [verify: :verify_none]
+    _ -> false
+  end
+
+config :mediate, Mediate.Repo,
+  hostname: System.fetch_env!("DB_HOST"),
+  password: System.fetch_env!("DB_PASSWORD"),
+  ssl: ssl_opts,
+  username: System.fetch_env!("DB_USER"),
+  pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
+  socket_options: maybe_ipv6
 
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.

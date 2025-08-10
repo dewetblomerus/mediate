@@ -37,6 +37,28 @@ if [ ! -d "$ASDF_DIR" ]; then
   git clone https://github.com/asdf-vm/asdf.git "$ASDF_DIR" --branch v0.14.1
 fi
 
+# Ensure asdf is initialized for future shells (idempotent)
+ASDF_INIT_BLOCK_START="# >>> asdf setup (ubuntu_setup.sh) >>>"
+ASDF_INIT_BLOCK_END="# <<< asdf setup (ubuntu_setup.sh) <<<"
+ASDF_INIT_SNIPPET='export ASDF_DIR="$HOME/.asdf"
+. "$ASDF_DIR/asdf.sh"
+if [ -f "$ASDF_DIR/completions/asdf.bash" ]; then
+  . "$ASDF_DIR/completions/asdf.bash"
+fi'
+
+for rc in "$HOME/.bashrc" "$HOME/.profile"; do
+  # Create file if it does not exist
+  [ -e "$rc" ] || touch "$rc"
+  # Append block only if not already present
+  if ! grep -Fqx "$ASDF_INIT_BLOCK_START" "$rc"; then
+    {
+      echo "$ASDF_INIT_BLOCK_START"
+      printf '%s\n' "$ASDF_INIT_SNIPPET"
+      echo "$ASDF_INIT_BLOCK_END"
+    } >> "$rc"
+  fi
+done
+
 # shellcheck source=/dev/null
 . "$ASDF_DIR/asdf.sh"
 

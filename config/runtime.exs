@@ -38,18 +38,48 @@ maybe_ipv6 =
   if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
 ssl_opts =
-  case System.get_env("DB_SSL", "true") do
+  case System.get_env("DB_SSL", "false") do
     "true" -> [verify: :verify_none]
     _ -> false
   end
 
-config :mediate, Mediate.Repo,
+base_repo_config = [
   hostname: System.fetch_env!("DB_HOST"),
   password: System.fetch_env!("DB_PASSWORD"),
-  ssl: ssl_opts,
-  username: System.fetch_env!("DB_USER"),
   pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
-  socket_options: maybe_ipv6
+  socket_options: maybe_ipv6,
+  ssl: ssl_opts,
+  username: System.fetch_env!("DB_USER")
+]
+
+case config_env() do
+  :dev ->
+    config :mediate,
+           Mediate.Repo,
+           Keyword.merge(base_repo_config,
+             database: "mediate_dev",
+             show_sensitive_data_on_connection_error: true,
+             stacktrace: true
+           )
+
+  :test ->
+    partition = System.get_env("MIX_TEST_PARTITION")
+
+    config :mediate,
+           Mediate.Repo,
+           Keyword.merge(base_repo_config,
+             database: "mediate_test#{partition}",
+             pool: Ecto.Adapters.SQL.Sandbox,
+             pool_size: System.schedulers_online() * 2
+           )
+
+  :prod ->
+    config :mediate,
+           Mediate.Repo,
+           Keyword.merge(base_repo_config,
+             database: "mediate_prod"
+           )
+end
 
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.

@@ -8,9 +8,6 @@ import Config
 config :mediate, MediateWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
-config :mediate, Mediate.Repo,
-  database: "mediate_prod"
-
 # Configures Swoosh API Client
 config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: Mediate.Finch
 

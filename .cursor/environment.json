@@ -1,8 +1,4 @@
 {
-  "build": {
-    "context": ".",
-    "dockerfile": "Dockerfile"
-  },
   "install": "mix setup",
   "start": "mix phx.server"
 }

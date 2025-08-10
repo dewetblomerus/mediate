@@ -24,7 +24,7 @@ $SUDO apt-get install -y \
   curl \
   git \
   gnupg \
-  libncurses5-dev \
+  libncurses-dev \
   libreadline-dev \
   libssl-dev \
   m4 \
@@ -64,5 +64,9 @@ if command -v mix >/dev/null 2>&1; then
   mix local.rebar --force || true
 fi
 
-echo "\nSetup complete. Current tool versions (if any):"
-asdf tool-versions || true
+printf "\nSetup complete. Detected tool versions (from %s):\n" "$TOOL_VERSIONS_FILE"
+if [ -f "$TOOL_VERSIONS_FILE" ]; then
+  cat "$TOOL_VERSIONS_FILE"
+fi
+echo "---"
+asdf current || true

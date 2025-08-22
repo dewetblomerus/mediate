@@ -92,3 +92,34 @@ if [ -f "$TOOL_VERSIONS_FILE" ]; then
 fi
 echo "---"
 asdf current || true
+
+echo ""
+echo "🎉 Setup complete! Activating asdf and testing tools..."
+
+# Source asdf to make tools available
+. "$ASDF_DIR/asdf.sh"
+
+# Test that tools are working
+echo "Testing installed tools:"
+if command -v elixir >/dev/null 2>&1; then
+  echo "✅ Elixir: $(elixir --version | head -1)"
+else
+  echo "❌ Elixir not found"
+fi
+
+if command -v erl >/dev/null 2>&1; then
+  echo "✅ Erlang: $(erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().' -noshell 2>/dev/null)"
+else
+  echo "❌ Erlang not found"
+fi
+
+if command -v mix >/dev/null 2>&1; then
+  echo "✅ Mix: $(mix --version | head -1)"
+else
+  echo "❌ Mix not found"
+fi
+
+echo ""
+echo "Note: Tools are activated for this script execution. To use them in your current shell:"
+echo "   source ~/.asdf/asdf.sh"
+echo "Or start a new shell session. Future shell sessions will automatically have access to these tools."

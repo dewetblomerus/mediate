@@ -1,4 +1,4 @@
-FROM ghcr.io/dewetblomerus/cursor-elixir-dev-base:latest
+FROM dewetblomerus/cursor-elixir-dev-base:latest
 
 # Create a non-root user for development
 USER ubuntu

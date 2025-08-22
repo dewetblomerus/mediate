@@ -1,22 +1,19 @@
 FROM ghcr.io/dewetblomerus/cursor-elixir-dev-base:latest
 
-ENV MIX_ENV=dev
-ENV PHX_SERVER=true
-ENV PHX_HOST=localhost
-ENV PORT=4000
+# Create a non-root user for development
+USER ubuntu
+WORKDIR /home/ubuntu
 
-WORKDIR /workspace
-CMD ["/bin/bash"]
+# Set basic environment for Elixir development
+ENV MIX_ENV=dev
 
 # Default database configuration for development (override via docker-compose or runtime)
 ENV DB_SSL=true
 
-# Auth0 non-secret configuration
-ENV AUTH0_REDIRECT_URI=http://localhost:4000/auth
-ENV AUTH0_BASE_URL=https://dewet-dev.us.auth0.com
-
 # Development notes:
-# - Clone your repository after building: git clone <your-repo> /home/developer/project
+# - Code will be cloned by the background agent into this directory
 # - Run `mix setup` to install dependencies and set up the database
 # - Start the server with: mix phx.server
-# - Access the application at http://localhost:4000
+# - Configure specific ports and hosts via environment.json or runtime as needed
+
+CMD ["/bin/bash"]

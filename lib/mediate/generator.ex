@@ -11,7 +11,7 @@ defmodule Mediate.Generator do
         %User{} = sender
       ) do
     thread =
-      Ash.load!(raw_thread, [:mediator, :users, messages: [:sender]])
+      Ash.load!(raw_thread, [:mediator, :users])
 
     mediator = thread.mediator
 
@@ -58,8 +58,14 @@ defmodule Mediate.Generator do
     - Your revised message should not include anything that marks it's start or end.
     """
 
+    messages_for_thread =
+      Mediate.Chat.Message
+      |> Ash.Query.for_read(:for_thread, %{thread_id: thread.id})
+      |> Ash.read!()
+      |> Ash.load!([:sender])
+
     transformed_messages =
-      thread.messages
+      messages_for_thread
       |> Enum.map(&transform_message(&1, users_map))
 
     messages = [

@@ -1,8 +1,7 @@
 FROM dewetblomerus/cursor-elixir-dev-base:latest
 
-# Create a non-root user for development
-USER ubuntu
-WORKDIR /home/ubuntu
+# Running as root for development (not recommended for production)
+WORKDIR /root
 
 # Set basic environment for Elixir development
 ENV MIX_ENV=dev

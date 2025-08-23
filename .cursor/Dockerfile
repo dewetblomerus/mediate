@@ -1,5 +1,11 @@
 FROM dewetblomerus/cursor-elixir-dev-base:latest
 
+# Fix apt repository time sync issues
+RUN echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until && \
+    echo 'Acquire::Check-Date "false";' >> /etc/apt/apt.conf.d/99no-check-valid-until && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Running as root for development (not recommended for production)
 WORKDIR /root
 

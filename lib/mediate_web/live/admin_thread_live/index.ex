@@ -20,8 +20,8 @@ defmodule MediateWeb.AdminThreadLive.Index do
       rows={@streams.threads}
       row_click={fn {_id, thread} -> JS.navigate(~p"/admin/threads/#{thread}") end}
     >
-      <:col :let={{_id, thread}} label="Id"><%= thread.id %></:col>
-      <:col :let={{_name, thread}} label="Name"><%= thread.name %></:col>
+      <:col :let={{_id, thread}} label="Id">{thread.id}</:col>
+      <:col :let={{_name, thread}} label="Name">{thread.name}</:col>
 
       <:action :let={{_id, thread}}>
         <div class="sr-only">

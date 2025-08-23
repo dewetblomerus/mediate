@@ -13,7 +13,7 @@ defmodule MediateWeb.ThreadLive do
       rows={@streams.threads}
       row_click={fn {_id, thread} -> JS.navigate(~p"/#{thread}") end}
     >
-      <:col :let={{_name, thread}} label="Name"><%= thread.name %></:col>
+      <:col :let={{_name, thread}} label="Name">{thread.name}</:col>
 
       <:action :let={{_id, thread}}>
         <div class="sr-only">

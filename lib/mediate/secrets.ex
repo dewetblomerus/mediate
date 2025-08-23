@@ -1,10 +1,12 @@
 defmodule Mediate.Secrets do
   use AshAuthentication.Secret
 
+  # New callback with context (preferred)
   def secret_for(
         [:authentication, :strategies, :auth0, :client_id],
         Mediate.Accounts.User,
-        _
+        _opts,
+        _context
       ) do
     get_config(:client_id)
   end
@@ -12,7 +14,8 @@ defmodule Mediate.Secrets do
   def secret_for(
         [:authentication, :strategies, :auth0, :redirect_uri],
         Mediate.Accounts.User,
-        _
+        _opts,
+        _context
       ) do
     get_config(:redirect_uri)
   end
@@ -20,7 +23,8 @@ defmodule Mediate.Secrets do
   def secret_for(
         [:authentication, :strategies, :auth0, :client_secret],
         Mediate.Accounts.User,
-        _
+        _opts,
+        _context
       ) do
     get_config(:client_secret)
   end
@@ -28,7 +32,8 @@ defmodule Mediate.Secrets do
   def secret_for(
         [:authentication, :strategies, :auth0, :base_url],
         Mediate.Accounts.User,
-        _
+        _opts,
+        _context
       ) do
     get_config(:base_url)
   end

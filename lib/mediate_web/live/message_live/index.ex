@@ -11,12 +11,12 @@ defmodule MediateWeb.MessageLive.Index do
   @impl true
   def render(assigns) do
     ~H"""
-    <%= @thread.name %>
+    {@thread.name}
 
     <.table id="messages" rows={@streams.messages}>
       <:col :let={{_id, message}}>
-        <strong><%= sender_name(message, @participants) %></strong>
-        <div><%= message.body %></div>
+        <strong>{sender_name(message, @participants)}</strong>
+        <div>{message.body}</div>
       </:col>
     </.table>
 

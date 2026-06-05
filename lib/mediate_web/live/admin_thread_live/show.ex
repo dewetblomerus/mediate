@@ -7,7 +7,7 @@ defmodule MediateWeb.AdminThreadLive.Show do
   def render(assigns) do
     ~H"""
     <.header>
-      <%= @thread.name %>
+      {@thread.name}
 
       <:actions>
         <.link
@@ -24,8 +24,8 @@ defmodule MediateWeb.AdminThreadLive.Show do
     </.header>
 
     <.table id="users" rows={@streams.users}>
-      <:col :let={{_id, user}} label="Id"><%= user.id %></:col>
-      <:col :let={{_name, user}} label="Name"><%= user.name %></:col>
+      <:col :let={{_id, user}} label="Id">{user.id}</:col>
+      <:col :let={{_name, user}} label="Name">{user.name}</:col>
 
       <:col :let={{_checkbox, user}} label="Member">
         <.input

@@ -4,6 +4,7 @@ defmodule Mediate.Secrets do
   def secret_for(
         [:authentication, :strategies, :auth0, :client_id],
         Mediate.Accounts.User,
+        _,
         _
       ) do
     get_config(:client_id)
@@ -12,6 +13,7 @@ defmodule Mediate.Secrets do
   def secret_for(
         [:authentication, :strategies, :auth0, :redirect_uri],
         Mediate.Accounts.User,
+        _,
         _
       ) do
     get_config(:redirect_uri)
@@ -20,6 +22,7 @@ defmodule Mediate.Secrets do
   def secret_for(
         [:authentication, :strategies, :auth0, :client_secret],
         Mediate.Accounts.User,
+        _,
         _
       ) do
     get_config(:client_secret)
@@ -28,6 +31,7 @@ defmodule Mediate.Secrets do
   def secret_for(
         [:authentication, :strategies, :auth0, :base_url],
         Mediate.Accounts.User,
+        _,
         _
       ) do
     get_config(:base_url)

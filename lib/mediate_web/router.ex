@@ -26,7 +26,7 @@ defmodule MediateWeb.Router do
 
     sign_in_route(register_path: "/register", reset_path: "/reset")
     sign_out_route AuthController
-    auth_routes_for Mediate.Accounts.User, to: AuthController
+    auth_routes AuthController, Mediate.Accounts.User
     reset_route []
 
     ash_authentication_live_session :authentication_required,

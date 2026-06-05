@@ -37,48 +37,55 @@ end
 maybe_ipv6 =
   if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
-ssl_opts =
-  case System.get_env("DB_SSL", "false") do
-    "true" -> [verify: :verify_none]
-    _ -> false
-  end
-
-base_repo_config = [
-  hostname: System.fetch_env!("DB_HOST"),
-  password: System.fetch_env!("DB_PASSWORD"),
-  pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
-  socket_options: maybe_ipv6,
-  ssl: ssl_opts,
-  username: System.fetch_env!("DB_USER")
-]
-
 case config_env() do
   :dev ->
+    ssl_opts =
+      case System.get_env("DB_SSL", "false") do
+        "true" -> [verify: :verify_none]
+        _ -> false
+      end
+
     config :mediate,
            Mediate.Repo,
-           Keyword.merge(base_repo_config,
-             database: "mediate_dev",
-             show_sensitive_data_on_connection_error: true,
-             stacktrace: true
-           )
+           database: "mediate_dev",
+           hostname: System.fetch_env!("DB_HOST"),
+           password: System.fetch_env!("DB_PASSWORD"),
+           pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
+           show_sensitive_data_on_connection_error: true,
+           socket_options: maybe_ipv6,
+           ssl: ssl_opts,
+           stacktrace: true,
+           username: System.fetch_env!("DB_USER")
 
   :test ->
     partition = System.get_env("MIX_TEST_PARTITION")
 
     config :mediate,
            Mediate.Repo,
-           Keyword.merge(base_repo_config,
-             database: "mediate_test#{partition}",
-             pool: Ecto.Adapters.SQL.Sandbox,
-             pool_size: System.schedulers_online() * 2
-           )
+           database: "mediate_test#{partition}",
+           hostname: System.get_env("DB_HOST", "localhost"),
+           password: System.get_env("DB_PASSWORD", "postgres"),
+           pool: Ecto.Adapters.SQL.Sandbox,
+           pool_size: System.schedulers_online() * 2,
+           socket_options: maybe_ipv6,
+           username: System.get_env("DB_USER", "postgres")
 
   :prod ->
+    ssl_opts =
+      case System.get_env("DB_SSL", "false") do
+        "true" -> [verify: :verify_none]
+        _ -> false
+      end
+
     config :mediate,
            Mediate.Repo,
-           Keyword.merge(base_repo_config,
-             database: "mediate_prod"
-           )
+           database: "mediate_prod",
+           hostname: System.fetch_env!("DB_HOST"),
+           password: System.fetch_env!("DB_PASSWORD"),
+           pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
+           socket_options: maybe_ipv6,
+           ssl: ssl_opts,
+           username: System.fetch_env!("DB_USER")
 end
 
 if config_env() == :prod do

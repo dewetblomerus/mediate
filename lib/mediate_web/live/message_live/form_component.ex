@@ -10,7 +10,7 @@ defmodule MediateWeb.MessageLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <%= @title %>
+        {@title}
         <:subtitle>
           Let's translate your message for greater clarity
         </:subtitle>
@@ -25,7 +25,7 @@ defmodule MediateWeb.MessageLive.FormComponent do
       />
 
       <%= for choice <- @choices do %>
-        <div><%= choice["message"]["content"] %></div>
+        <div>{choice["message"]["content"]}</div>
         <.button
           phx-disable-with="Saving..."
           phx-click="send_suggestion"

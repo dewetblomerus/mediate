@@ -6,7 +6,7 @@ defmodule MediateWeb.AdminThreadLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <%= @title %>
+        {@title}
         <:subtitle>
           Use this form to manage thread records in your database.
         </:subtitle>

@@ -37,55 +37,34 @@ end
 maybe_ipv6 =
   if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
-case config_env() do
-  :dev ->
-    ssl_opts =
-      case System.get_env("DB_SSL", "false") do
-        "true" -> [verify: :verify_none]
-        _ -> false
-      end
+ssl_opts =
+  case System.get_env("DB_SSL", "false") do
+    "true" -> [verify: :verify_none]
+    _ -> false
+  end
 
-    config :mediate,
-           Mediate.Repo,
-           database: "mediate_dev",
-           hostname: System.fetch_env!("DB_HOST"),
-           password: System.fetch_env!("DB_PASSWORD"),
-           pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
-           show_sensitive_data_on_connection_error: true,
-           socket_options: maybe_ipv6,
-           ssl: ssl_opts,
-           stacktrace: true,
-           username: System.fetch_env!("DB_USER")
+if config_env() == :dev do
+  config :mediate, Mediate.Repo,
+    username: System.get_env("DB_USER", "postgres"),
+    password: System.get_env("DB_PASSWORD", "postgres"),
+    hostname: System.get_env("DB_HOST", "localhost"),
+    database: "mediate_dev",
+    pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
+    socket_options: maybe_ipv6,
+    ssl: ssl_opts,
+    show_sensitive_data_on_connection_error: true,
+    stacktrace: true
+end
 
-  :test ->
-    partition = System.get_env("MIX_TEST_PARTITION")
-
-    config :mediate,
-           Mediate.Repo,
-           database: "mediate_test#{partition}",
-           hostname: System.get_env("DB_HOST", "localhost"),
-           password: System.get_env("DB_PASSWORD", "postgres"),
-           pool: Ecto.Adapters.SQL.Sandbox,
-           pool_size: System.schedulers_online() * 2,
-           socket_options: maybe_ipv6,
-           username: System.get_env("DB_USER", "postgres")
-
-  :prod ->
-    ssl_opts =
-      case System.get_env("DB_SSL", "false") do
-        "true" -> [verify: :verify_none]
-        _ -> false
-      end
-
-    config :mediate,
-           Mediate.Repo,
-           database: "mediate_prod",
-           hostname: System.fetch_env!("DB_HOST"),
-           password: System.fetch_env!("DB_PASSWORD"),
-           pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
-           socket_options: maybe_ipv6,
-           ssl: ssl_opts,
-           username: System.fetch_env!("DB_USER")
+if config_env() == :prod do
+  config :mediate, Mediate.Repo,
+    username: System.fetch_env!("DB_USER"),
+    password: System.fetch_env!("DB_PASSWORD"),
+    hostname: System.fetch_env!("DB_HOST"),
+    database: "mediate_prod",
+    pool_size: String.to_integer(System.get_env("POOL_SIZE", "10")),
+    socket_options: maybe_ipv6,
+    ssl: ssl_opts
 end
 
 if config_env() == :prod do

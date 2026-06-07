@@ -1,8 +1,6 @@
 defmodule MediateWeb.MessageLive.Index do
   use MediateWeb, :live_view
 
-  require Ash.Query
-
   alias Mediate.Accounts.User
   alias Mediate.Chat.Message
   alias Mediate.Chat.Notifier

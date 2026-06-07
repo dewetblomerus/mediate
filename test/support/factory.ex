@@ -23,12 +23,14 @@ defmodule Mediate.Factory do
   end
 
   def user_factory do
+    unique_id = System.unique_integer([:positive])
+
     user_info = %{
       "email_verified" => Enum.random([true, false]),
-      "email" => Faker.Internet.email(),
-      "name" => Faker.Person.name(),
-      "sub" => "google-oauth2|#{System.unique_integer([:positive])}",
-      "picture" => Faker.Internet.url()
+      "email" => "user-#{unique_id}@example.com",
+      "name" => "User #{unique_id}",
+      "sub" => "google-oauth2|#{unique_id}",
+      "picture" => "https://example.com/users/#{unique_id}.png"
     }
 
     User
@@ -43,10 +45,12 @@ defmodule Mediate.Factory do
   end
 
   def thread_factory(user, _) do
+    unique_id = System.unique_integer([:positive])
+
     Thread.create!(
       %{
-        name: Faker.String.base64(40),
-        mediator_notes: Faker.String.base64()
+        name: "Thread #{unique_id}",
+        mediator_notes: "Mediator notes #{unique_id}"
       },
       actor: user
     )

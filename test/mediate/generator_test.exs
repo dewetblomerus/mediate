@@ -63,7 +63,6 @@ defmodule Mediate.GeneratorTest do
                request_path: "/v1/chat/completions",
                req_headers: [
                  {"accept", "application/json"},
-                 {"accept-encoding", "gzip"},
                  {"authorization", "Bearer test-key"},
                  {"content-type", "application/json"},
                  {"user-agent", _}
